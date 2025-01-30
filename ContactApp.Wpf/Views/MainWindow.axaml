@@ -7,17 +7,20 @@
   mc:Ignorable="d"
   d:DesignWidth="300" d:DesignHeight="450"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
-  Icon="/Assets/avalonia-logo.ico" Title="ContactApp.Wpf">
+  Icon="/Assets/avalonia-logo.ico" Title="Contacts Manager">
 
   <Design.DataContext>
     <vm:MainWindowViewModel />
   </Design.DataContext>
 
   <Grid Margin="0 30">
-    <!--<Label Theme="{DynamicResource TitleLabel}" Classes="H3">Test</Label>-->
-    <!--<comp:NavigationBar Items="{Binding SidebarItems}" Label="Dummy Text" />
-    <comp:Sidebar Items="{Binding SidebarItems}" />-->
-    <control:Sidebar Name="SidebarControl" Selected="{Binding SidebarSelected}" />
+    <control:SidebarControl 
+      SelectedChange="SidebarControl_OnSelectedChange"
+      Items="{Binding SidebarItems}"
+      Selected="{Binding SidebarSelected}"/>
+    
+    <Button Command="{Binding ChangeSelectedCommand}"
+      Content="Highlight 'Support'"/>
   </Grid>
 
 </Window>
