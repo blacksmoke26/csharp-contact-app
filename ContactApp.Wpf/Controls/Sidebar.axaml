@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:ContactApp.Wpf.Controls"
+  xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels"
+  xmlns:mod="clr-namespace:ContactApp.Wpf.Models"
+  xmlns:conv="clr-namespace:ContactApp.Wpf.Convertors" mc:Ignorable="d"
+  d:DesignWidth="280" d:DesignHeight="450" x:Name="MainCtl"
+  x:Class="ContactApp.Wpf.Controls.Sidebar" x:DataType="vm:SidebarViewModel">
+
+  <UserControl.Resources>
+    <conv:SidebarItemTypeBooleanConvertor x:Key="SidebarItemTypeBoolConvertor" />
+  </UserControl.Resources>
+
+  <Design.DataContext>
+    <vm:SidebarViewModel />
+  </Design.DataContext>
+
+  <ItemsControl x:Name="ItemsControl"
+    ItemsSource="{Binding #MainCtl.((vm:SidebarViewModel)DataContext).SidebarItems}">
+    <ItemsControl.ItemTemplate>
+      <DataTemplate DataType="{x:Type mod:SidebarItem}">
+        <StackPanel>
+          <!-- Divider -->
+          <Border Height="1" Margin="0 10"
+            Background="{DynamicResource MenuItemSeparatorBackground}"
+            IsVisible="{Binding ItemType, 
+            Converter={StaticResource SidebarItemTypeBoolConvertor},
+            ConverterParameter=Divider}" />
+
+          <!-- Header -->
+          <TextBlock Margin="40 15 0 15" Text="{Binding Label}"
+            FontWeight="DemiBold"
+            Foreground="{DynamicResource TextBlockDefaultForeground}"
+            IsVisible="{Binding ItemType, 
+            Converter={StaticResource SidebarItemTypeBoolConvertor},
+            ConverterParameter=Header}" />
+
+          <!--Classes.IsSelected="{Binding #MainCtl.((vm:SidebarViewModel)DataContext).Selected}"-->
+          <!-- Item -->
+          <Button VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+            Margin="25 5 25 5"
+            Transitions="{x:Null}"
+            Command="{Binding #MainCtl.((vm:SidebarViewModel)DataContext).ItemOnClickCommand}"
+            CommandParameter="{Binding}" HorizontalContentAlignment="Left"
+            Classes="Large Tertiary" Classes.NotSelected="{Binding !IsSelected}"
+            HorizontalAlignment="Stretch"
+            IsVisible="{Binding ItemType, 
+            Converter={StaticResource SidebarItemTypeBoolConvertor},
+            ConverterParameter=Item}">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <TextBlock FontFamily="{StaticResource Phosphor}" FontSize="18"
+                FontWeight="Normal" Text="{Binding IconText}"
+                Foreground="{Binding IconColor}" />
+              <TextBlock Text="{Binding Label}" FontWeight="Normal" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+
+  <UserControl.Styles>
+    <Style Selector="Button.NotSelected">
+      <Setter Property="Theme" Value="{DynamicResource BorderlessButton}" />
+    </Style>
+    <Style Selector=":is(Button):pressed">
+      <Setter Property="RenderTransform" Value="none" />
+    </Style>
+  </UserControl.Styles>
+</UserControl>
