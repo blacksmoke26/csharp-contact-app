@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="800"
+  x:Class="ContactApp.Wpf.Views.NoContactView">
+
+  <Grid RowDefinitions="150, *" HorizontalAlignment="Center" VerticalAlignment="Top">
+    <StackPanel Grid.Row="1">
+      <Label Theme="{DynamicResource TitleLabel}"
+        FontWeight="Normal"
+        Classes="H4">
+        Please Select a Contact
+      </Label>
+      <Image Source="/Assets/Images/emailSv.webp" Height="250"/>
+    </StackPanel>
+  </Grid>
+</UserControl>
