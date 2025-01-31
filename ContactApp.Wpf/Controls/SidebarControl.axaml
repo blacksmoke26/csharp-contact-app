@@ -9,10 +9,6 @@
   x:Class="ContactApp.Wpf.Controls.SidebarControl" Content="{Binding}"
   x:DataType="controls:SidebarControl">
 
-  <Design.PreviewWith>
-    <ContentControl/>
-  </Design.PreviewWith>
-
   <ContentControl.Resources>
     <conv:SidebarItemTypeBooleanConvertor x:Key="SidebarItemTypeBoolConvertor" />
   </ContentControl.Resources>
@@ -31,19 +27,19 @@
                 ConverterParameter=Divider}" />
 
               <!-- Header -->
-              <TextBlock Margin="40 15 0 15" Text="{Binding Label}"
+              <TextBlock Margin="15 15 0 15" Text="{Binding Label}"
                 FontWeight="DemiBold"
                 Foreground="{DynamicResource TextBlockDefaultForeground}"
                 IsVisible="{Binding ItemType, 
                 Converter={StaticResource SidebarItemTypeBoolConvertor},
                 ConverterParameter=Header}" />
 
-              <Button VerticalAlignment="Stretch"
-                VerticalContentAlignment="Center" Margin="25 5 25 5"
+              <Button VerticalAlignment="Stretch" 
+                VerticalContentAlignment="Center" Margin="0 5 0 5"
                 Transitions="{x:Null}" HorizontalContentAlignment="Left"
                 Classes="Large Tertiary"
                 Command="{Binding $parent[controls:SidebarControl].ItemOnClickCommand}"
-                CommandParameter="{Binding}" 
+                CommandParameter="{Binding}"
                 Classes.NotSelected="{Binding !IsSelected}"
                 HorizontalAlignment="Stretch"
                 IsVisible="{Binding ItemType, 
