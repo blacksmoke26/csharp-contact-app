@@ -3,9 +3,8 @@
   xmlns:vm="using:ContactApp.Wpf.ViewModels"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:control="clr-namespace:ContactApp.Wpf.Controls"
-  mc:Ignorable="d"
-  d:DesignWidth="300" d:DesignHeight="450"
+  xmlns:control="clr-namespace:ContactApp.Wpf.Controls" mc:Ignorable="d"
+  d:DesignWidth="1152" d:DesignHeight="900"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
   Icon="/Assets/avalonia-logo.ico" Title="Contacts Manager">
 
@@ -13,14 +12,56 @@
     <vm:MainWindowViewModel />
   </Design.DataContext>
 
-  <Grid Margin="0 30">
-    <control:SidebarControl 
-      SelectedChange="SidebarControl_OnSelectedChange"
-      Items="{Binding SidebarItems}"
-      Selected="{Binding SidebarSelected}"/>
-    
-    <Button Command="{Binding ChangeSelectedCommand}"
-      Content="Highlight 'Support'"/>
-  </Grid>
+  <Grid Margin="30 30" RowDefinitions="Auto,*">
+    <Border Height="109" Margin="0 0 0 20" CornerRadius="4"
+      Background="{StaticResource HeaderPrimaryBackground}" BorderThickness="0">
+      <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch"
+        VerticalAlignment="Top">
+        <StackPanel Spacing="3" Margin="25 25 0 0">
+          <Label Theme="{DynamicResource TitleLabel}" Classes="H3"
+            Content="Contact app" />
+          <Label FontSize="16" FontWeight="Light" Content="List Your Contacts" />
+        </StackPanel>
+        <Border Grid.Column="1" ClipToBounds="True" Height="109"
+          HorizontalAlignment="Right" Margin="0 0 25 0">
+          <Image Source="/Assets/Images/ChatBc.webp" Width="165" Height="165"
+            VerticalAlignment="Top" />
+        </Border>
+      </Grid>
+    </Border>
 
+    <Border Grid.Row="1" BorderBrush="Gray" Background="Transparent"
+      BorderThickness="1" CornerRadius="4">
+      <Grid ColumnDefinitions="*, *, 2*">
+        <Border Cursor="Hand" BorderThickness=" 0 0 1 0" BorderBrush="Gray"
+          Padding="20 20 20 0">
+          <StackPanel Spacing="15">
+            <!--<viewForm:ContactFormView/>-->
+            <Button Theme="{DynamicResource SolidButton}" Classes="Large"
+              HorizontalAlignment="Stretch" Content="New Contact" />
+            <control:SidebarControl
+              SelectedChange="SidebarControl_OnSelectedChange"
+              Items="{Binding SidebarItems}"
+              Selected="{Binding SidebarSelected}" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" BorderThickness=" 0 0 1 0" BorderBrush="Gray">
+          <StackPanel Margin="5 15 5 0">
+            <TextBox Classes="Bordered Large" Watermark="Search contact"
+              Padding="13 0 10 0" Margin="10 0">
+              <TextBox.InnerRightContent>
+                <TextBlock FontSize="18" FontFamily="{StaticResource Phosphor}"
+                  Text="&#xE30C;" />
+              </TextBox.InnerRightContent>
+            </TextBox>
+          </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Column="2">
+          <!--  -->
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Grid>
 </Window>
