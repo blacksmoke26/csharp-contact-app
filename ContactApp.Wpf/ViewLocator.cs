@@ -7,6 +7,9 @@ using HanumanInstitute.MvvmDialogs.Avalonia;
 namespace ContactApp.Wpf;
 
 public class ViewLocator : ViewLocatorBase {
+  /// <summary>
+  /// Lookup ViewModel~View Dictionary for view instances 
+  /// </summary>
   private readonly Dictionary<Type, Func<Control>> _locator = new();
   
   /// <inheritdoc />
@@ -40,14 +43,13 @@ public class ViewLocator : ViewLocatorBase {
   }
 
   /// <summary>
-  /// Adds the ViewModel / View into the locator registry
+  /// Adds the ViewModel / View into the <see cref="_locator"/> dictionary
   /// </summary>
   private void RegisterViewFactory<TViewModel, TView>()
     where TViewModel : class
     where TView : Control {
     _locator.Add(typeof(TViewModel), Activator.CreateInstance<TView>);
   }
-
   
   /// <inheritdoc cref="Build"/>
   public override object Create(object viewModel) => Build(viewModel);
