@@ -6,6 +6,7 @@
   xmlns:control="clr-namespace:ContactApp.Wpf.Controls" mc:Ignorable="d"
   d:DesignWidth="1152" d:DesignHeight="900"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
+  Background="{DynamicResource PrimaryBackground}"
   Icon="/Assets/avalonia-logo.ico" Title="Contacts Manager">
 
   <Design.DataContext>
@@ -13,6 +14,7 @@
   </Design.DataContext>
 
   <Grid Margin="30 30" RowDefinitions="Auto,*">
+    <!-- Header -->
     <Border Height="109" Margin="0 0 0 20" CornerRadius="4"
       Background="{StaticResource HeaderPrimaryBackground}" BorderThickness="0">
       <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch"
@@ -30,22 +32,23 @@
       </Grid>
     </Border>
 
+    <!-- Container -->
     <Border Grid.Row="1" BorderBrush="Gray" Background="Transparent"
       BorderThickness="1" CornerRadius="4">
       <Grid ColumnDefinitions="*, *, 2*">
+        <!-- Filters -->
         <Border Cursor="Hand" BorderThickness=" 0 0 1 0" BorderBrush="Gray"
           Padding="20 20 20 0">
           <StackPanel Spacing="15">
-            <!--<viewForm:ContactFormView/>-->
             <Button Theme="{DynamicResource SolidButton}" Classes="Large"
-              HorizontalAlignment="Stretch" Content="New Contact" />
-            <control:SidebarControl
-              SelectedChange="SidebarControl_OnSelectedChange"
-              Items="{Binding SidebarItems}"
+              HorizontalAlignment="Stretch" Content="New Contact"
+              Command="{Binding OpenDialogCommand}" />
+            <control:SidebarControl Items="{Binding SidebarItems}"
               Selected="{Binding SidebarSelected}" />
           </StackPanel>
         </Border>
 
+        <!-- Listing -->
         <Border Grid.Column="1" BorderThickness=" 0 0 1 0" BorderBrush="Gray">
           <StackPanel Margin="5 15 5 0">
             <TextBox Classes="Bordered Large" Watermark="Search contact"
@@ -58,6 +61,7 @@
           </StackPanel>
         </Border>
 
+        <!-- Details -->
         <StackPanel Grid.Column="2">
           <!--  -->
         </StackPanel>
