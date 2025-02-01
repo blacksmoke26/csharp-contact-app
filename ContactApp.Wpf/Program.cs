@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using System;
-
-namespace ContactApp.Wpf;
+﻿namespace ContactApp.Wpf;
 
 sealed class Program {
   // Initialization code. Don't use any Avalonia, third-party APIs or any
