@@ -1,13 +1,11 @@
-using System.Linq;
-using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using ContactApp.Wpf.ViewModels;
 using ContactApp.Wpf.ViewModels.Forms;
 using ContactApp.Wpf.Views;
-using Microsoft.Extensions.DependencyInjection;
+using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.Avalonia;
 
 namespace ContactApp.Wpf;
 
@@ -74,6 +72,17 @@ public partial class App : Application {
 
     services.AddSingleton<MainWindowViewModel>();
     services.AddTransient<ContactFormViewModel>();
+
+    #endregion
+
+    #region View Dialogs
+
+    services.AddSingleton<IDialogService>(
+      new DialogService(new DialogManager(
+          dialogFactory: new DialogFactory().AddDialogHost().AddMessageBox(),
+          viewLocator: new ViewLocator()
+        ), viewModelFactory: type => Ioc.Default.GetService(type)
+      ));
 
     #endregion
 

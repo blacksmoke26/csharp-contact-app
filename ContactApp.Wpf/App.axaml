@@ -1,16 +1,13 @@
 <Application xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:semi="https://irihi.tech/semi" x:Class="ContactApp.Wpf.App"
-  xmlns:local="using:ContactApp.Wpf" RequestedThemeVariant="Dark">
+  xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+  xmlns:local="using:ContactApp.Wpf" RequestedThemeVariant="Default">
   <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
   <Application.DataTemplates>
     <local:ViewLocator />
   </Application.DataTemplates>
-
-  <Application.Styles>
-    <semi:SemiTheme Locale="en-US" />
-  </Application.Styles>
 
   <Application.Resources>
     <ResourceDictionary>
@@ -20,4 +17,9 @@
     </ResourceDictionary>
     <FontFamily x:Key="Phosphor">/Assets/Fonts/Phosphor.ttf#Phosphor</FontFamily>
   </Application.Resources>
+
+  <Application.Styles>
+    <semi:SemiTheme Locale="en-US" />
+    <dialogHostAvalonia:DialogHostStyles />
+  </Application.Styles>
 </Application>
