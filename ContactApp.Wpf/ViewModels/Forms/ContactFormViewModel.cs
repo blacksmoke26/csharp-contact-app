@@ -1,6 +1,3 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using ContactApp.Wpf.Models;
-
 namespace ContactApp.Wpf.ViewModels.Forms;
 
 public partial class ContactFormViewModel : ObservableValidator {
