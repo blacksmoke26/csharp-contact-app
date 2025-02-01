@@ -1,5 +1,3 @@
-using Avalonia.Controls;
-
 namespace ContactApp.Wpf.Views.Forms;
 
 public partial class ContactFormView : UserControl {

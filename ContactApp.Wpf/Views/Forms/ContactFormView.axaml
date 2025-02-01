@@ -2,23 +2,34 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
   xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels.Forms" mc:Ignorable="d"
   d:DesignWidth="600" d:DesignHeight="650"
   d:DataContext="vm:ContactFormViewModel"
   x:Class="ContactApp.Wpf.Views.Forms.ContactFormView"
-  Background="{DynamicResource ButtonBackground}"
+  Background="{DynamicResource DialogPrimaryBackground}" Width="600"
   x:DataType="vm:ContactFormViewModel">
 
   <UserControl.DataContext>
     <vm:ContactFormViewModel />
   </UserControl.DataContext>
 
-  <StackPanel Spacing="15" Margin="20">
-    <Label Theme="{DynamicResource TitleLabel}" Classes="H4"
-      FontWeight="Regular" Content="Add New Contact" />
+  <StackPanel Spacing="20" Margin="20">
+    <Grid ColumnDefinitions="*, *" VerticalAlignment="Center">
+      <Label Theme="{DynamicResource TitleLabel}" Classes="H4"
+        FontWeight="Regular" Content="Add New Contact" />
+      <HyperlinkButton Grid.Column="1"
+        HorizontalAlignment="Right"
+        Foreground="{DynamicResource TextBlockDefaultForeground}"
+        FontFamily="{StaticResource Phosphor}" Content="&#xE4F6;"
+        FontSize="18"
+        HorizontalContentAlignment="Right"
+        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+        CommandParameter="true" />
+    </Grid>
 
     <TextBlock MaxLines="2" TextWrapping="NoWrap" Classes="Tertiary">
-      Lets add new contact for your application. fill the all field
+      Lets add new contact for your application. Fill all the fields
       <LineBreak />
       and click on the Submit button.
     </TextBlock>
@@ -80,9 +91,11 @@
     </StackPanel>
 
     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0 10 ">
-      <Button Theme="{DynamicResource SolidButton}" Content="Submit" />
-      <Button Theme="{DynamicResource SolidButton}" Classes="Danger"
-        Content="Cancel" />
+      <Button Theme="{DynamicResource SolidButton}" Content="  Submit  " />
+      <Button Theme="{DynamicResource SolidButton}" Classes=" Danger"
+        Content="Cancel"
+        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+        CommandParameter="true" />
     </StackPanel>
   </StackPanel>
 </UserControl>
