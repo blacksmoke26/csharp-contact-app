@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using Avalonia.Media;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ContactApp.Wpf.Models;
+﻿using Avalonia.Media;
+using ContactApp.Wpf.ViewModels.Forms;
+using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.Avalonia.DialogHost;
 
 namespace ContactApp.Wpf.ViewModels;
 
@@ -14,11 +13,6 @@ public partial class MainWindowViewModel : ViewModelBase {
 
   public MainWindowViewModel() {
     InitializeSidebarItems();
-  }
-
-  [RelayCommand]
-  private void ChangeSelected() {
-    SidebarSelected = "Support";
   }
 
   private void InitializeSidebarItems() {
@@ -66,5 +60,23 @@ public partial class MainWindowViewModel : ViewModelBase {
       IconText = "\ue25a",
       IconColor = SolidColorBrush.Parse("#13deb9"),
     });
+  }
+
+  /// <summary>
+  /// Opens the new contact dialog
+  /// </summary>
+  [RelayCommand]
+  private async Task OpenNewContactDialog() {
+    var dialogService = Ioc.Default.GetRequiredService<IDialogService>();
+    var dialogViewModel = dialogService.CreateViewModel<ContactFormViewModel>();
+
+    Application.Current!.Resources.TryGetResource("DialogOverlayBackground", Application.Current.ActualThemeVariant,
+      out var dialogOverlayBackground);
+
+    await dialogService
+      .ShowDialogHostAsync(this, new DialogHostSettings(dialogViewModel) {
+        DialogMargin = new Thickness(0),
+        OverlayBackground = (SolidColorBrush)dialogOverlayBackground!
+      }).ConfigureAwait(true);
   }
 }
