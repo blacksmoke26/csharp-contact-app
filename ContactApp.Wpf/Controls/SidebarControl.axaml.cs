@@ -1,11 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Interactivity;
-using CommunityToolkit.Mvvm.Input;
-using ContactApp.Wpf.Models;
 
 namespace ContactApp.Wpf.Controls;
 

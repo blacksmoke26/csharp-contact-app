@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using ContactApp.Wpf.Models;
 using Dumpify;
 
 namespace ContactApp.Wpf.Convertors;
