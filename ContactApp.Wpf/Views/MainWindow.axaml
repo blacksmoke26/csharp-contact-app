@@ -42,7 +42,7 @@
           <StackPanel Spacing="15">
             <Button Theme="{DynamicResource SolidButton}" Classes="Large"
               HorizontalAlignment="Stretch" Content="New Contact"
-              Command="{Binding OpenDialogCommand}" />
+              Command="{Binding OpenNewContactDialogCommand}" />
             <control:SidebarControl Items="{Binding SidebarItems}"
               Selected="{Binding SidebarSelected}" />
           </StackPanel>
