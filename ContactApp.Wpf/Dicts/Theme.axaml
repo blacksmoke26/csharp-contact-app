@@ -3,9 +3,15 @@
   <ResourceDictionary.ThemeDictionaries>
     <ResourceDictionary x:Key="Light">
       <SolidColorBrush x:Key="HeaderPrimaryBackground" Color="#ECF2FF" />
+      <SolidColorBrush x:Key="PrimaryBackground" Color="#FEFEFE" />
+      <SolidColorBrush x:Key="DialogPrimaryBackground" Color="#FEFEFE" />
+      <SolidColorBrush x:Key="DialogOverlayBackground" Color="#FFFFFF" />
     </ResourceDictionary>
     <ResourceDictionary x:Key="Dark">
       <SolidColorBrush x:Key="HeaderPrimaryBackground" Color="#253662" />
+      <SolidColorBrush x:Key="PrimaryBackground" Color="#2B2B2B" />
+      <SolidColorBrush x:Key="DialogPrimaryBackground" Color="#2B2D30" />
+      <SolidColorBrush x:Key="DialogOverlayBackground" Color="#0C0D0E" />
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
