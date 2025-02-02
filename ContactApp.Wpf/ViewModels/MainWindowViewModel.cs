@@ -13,21 +13,19 @@ public partial class MainWindowViewModel : ViewModelBase {
   [ObservableProperty] private ObservableCollection<SidebarItem> _sidebarItems = [];
 
   public MainWindowViewModel() {
-    InitializeSidebarItems();
+    _ = InitializeSidebarItems();
   }
 
   /// <summary>
-  /// Prepare sidebar list items
+  /// Prepare sidebar
   /// </summary>
-  private void InitializeSidebarItems() {
-    var sidebarItems = SidebarItem.GetPredefinedList();
+  private async Task InitializeSidebarItems() {
+    var sidebarItems = await SidebarItem.FetchPredefinedAsync();
 
-    Department.GetPredefinedList()
-      .ForEach(x => sidebarItems.Add(SidebarItem.FromDepartment(x)));
+    var departments = await Department.FetchPredefinedAsync();
+    sidebarItems.AddRange(departments.Select(x => SidebarItem.FromDepartment(x)));
 
-    foreach (var sidebarItem in sidebarItems) {
-      SidebarItems.Add(sidebarItem);
-    }
+    sidebarItems.ForEach(SidebarItems.Add);
   }
 
   /// <summary>

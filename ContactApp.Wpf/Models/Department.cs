@@ -12,8 +12,8 @@ public class Department {
   /// Return the predefined departments 
   /// </summary>
   /// <returns>The department list</returns>
-  public static List<Department> GetPredefinedList() {
-    return [
+  public static Task<List<Department>> FetchPredefinedAsync() {
+    return Task.FromResult<List<Department>>([
       new() {
         Name = "Engineering",
         Slug = "engineering",
@@ -29,6 +29,6 @@ public class Department {
         Slug = "sales",
         Color = "#13deb9",
       }
-    ];
+    ]);
   }
 }

@@ -49,8 +49,8 @@ public partial class SidebarItem : ObservableObject {
   /// Return the predefined sidebar-item 
   /// </summary>
   /// <returns>The Sidebar-item list</returns>
-  public static List<SidebarItem> GetPredefinedList() {
-    return [
+  public static Task<List<SidebarItem>> FetchPredefinedAsync() {
+    return Task.FromResult<List<SidebarItem>>([
       new() {
         Id = "all",
         Label = "All",
@@ -77,6 +77,6 @@ public partial class SidebarItem : ObservableObject {
         Label = "Categories",
         ItemType = SidebarItemType.Header,
       },
-    ];
+    ]);
   }
 }
