@@ -4,11 +4,11 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:control="clr-namespace:ContactApp.Wpf.Controls"
-  xmlns:v="clr-namespace:ContactApp.Wpf.Views" mc:Ignorable="d"
-  d:DesignWidth="800" d:DesignHeight="900"
-  Width="1250" MinWidth="1000"
-  MinHeight="950"
-  ExtendClientAreaToDecorationsHint="False" WindowStartupLocation="CenterScreen"
+  xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+  xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="900" Width="1250"
+  MinWidth="1000" MinHeight="950" ExtendClientAreaToDecorationsHint="False"
+  WindowStartupLocation="CenterScreen"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
   Background="{DynamicResource PrimaryBackground}"
   Icon="/Assets/avalonia-logo.ico" Title="Contacts Manager">
@@ -19,7 +19,7 @@
 
   <Grid Margin="30 30" RowDefinitions="Auto,*">
     <!-- Header -->
-    <Border Height="109" Margin="5 0 5 20" CornerRadius="4"
+    <Border Height="109" Margin="3 0 3 20" CornerRadius="4"
       Background="{StaticResource HeaderPrimaryBackground}" BorderThickness="0">
       <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch"
         VerticalAlignment="Top">
@@ -41,15 +41,13 @@
       Padding="0" Background="Transparent" BorderThickness="1" CornerRadius="4">
       <Grid ColumnDefinitions="*, *, 2*">
         <!-- Sidebar -->
-        <Border Cursor="Hand" BorderThickness=" 0 0 1 0"
+        <Border BorderThickness=" 0 0 1 0"
           BorderBrush="{DynamicResource DividerBorderBrush}">
           <StackPanel Spacing="15">
             <!-- New Contact Button -->
-            <Button
-              CornerRadius="6"
-              Margin="15 17 15 0 "
-              Theme="{DynamicResource SolidButton}" Classes="Secondary Large"
-              HorizontalAlignment="Stretch" Content="New Contact"
+            <Button Margin="15 17 15 0 " Theme="{DynamicResource SolidButton}"
+              Classes="Secondary Large" HorizontalAlignment="Stretch"
+              Content="New Contact"
               Command="{Binding OpenNewContactDialogCommand}" />
             <control:SidebarControl Items="{Binding SidebarItems}"
               Selected="{Binding SidebarSelected}" />
@@ -57,22 +55,38 @@
         </Border>
 
         <!-- Listing -->
-        <Border Grid.Column="1" BorderThickness=" 0 0 1 0"
+        <Border Grid.Column="1" BorderThickness="0 0 1 0"
           BorderBrush="{DynamicResource DividerBorderBrush}">
-          <StackPanel Margin="5 15 5 0">
+          <StackPanel Spacing="10" Margin="0 15 0 0">
             <TextBox Classes="Bordered Large" Watermark="Search contact"
-              Padding="13 0 10 0" Margin="10 0">
+              Padding="13 0 10 0" Margin="15 0 15 0">
               <TextBox.InnerRightContent>
                 <TextBlock FontSize="18" FontFamily="{StaticResource Phosphor}"
                   Text="&#xE30C;" />
               </TextBox.InnerRightContent>
             </TextBox>
+            <control:ContactListingControl  x:Name="ContactsListing"
+              ItemsSource="{Binding ContactItems}">
+              <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="SelectionChange">
+                  <ia:CallMethodAction TargetObject="{Binding}" MethodName="ContactSelectionChange" />
+                </ia:EventTriggerBehavior>
+                
+                <ia:EventTriggerBehavior EventName="StarClick">
+                  <ia:CallMethodAction TargetObject="{Binding}" MethodName="ContactStarClick" />
+                </ia:EventTriggerBehavior>
+                
+                <ia:EventTriggerBehavior EventName="RemoveClick">
+                  <ia:CallMethodAction TargetObject="{Binding}" MethodName="ContactRemoveClick" />
+                </ia:EventTriggerBehavior>
+              </i:Interaction.Behaviors>
+            </control:ContactListingControl>
           </StackPanel>
         </Border>
 
         <!-- Details -->
         <StackPanel Grid.Column="2">
-          <v:ContactDetailsView />
+          <ContentControl Content="{Binding DetailsView}" />
         </StackPanel>
       </Grid>
     </Border>
