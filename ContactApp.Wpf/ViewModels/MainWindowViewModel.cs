@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media;
 using ContactApp.Wpf.ViewModels.Forms;
+using ContactApp.Wpf.Views;
 using Dumpify;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.Avalonia.DialogHost;
@@ -10,7 +11,11 @@ public partial class MainWindowViewModel : ViewModelBase {
   [ObservableProperty] private string _label = string.Empty;
 
   [ObservableProperty] private string? _sidebarSelected = "All";
+  [ObservableProperty] private Contact? _contactSelected;
+  [ObservableProperty] private ObservableCollection<Contact> _contactItems = [];
   [ObservableProperty] private ObservableCollection<SidebarItem> _sidebarItems = [];
+
+  [ObservableProperty] private ContentControl _detailsView = new NoContactView();
 
   public MainWindowViewModel() {
     _ = InitializeSidebarItems();
@@ -26,6 +31,9 @@ public partial class MainWindowViewModel : ViewModelBase {
     sidebarItems.AddRange(departments.Select(x => SidebarItem.FromDepartment(x)));
 
     sidebarItems.ForEach(SidebarItems.Add);
+    // contacts
+    var contacts = await Contact.FetchPredefinedAsync();
+    contacts.ForEach(ContactItems.Add);
   }
 
   /// <summary>
@@ -46,5 +54,17 @@ public partial class MainWindowViewModel : ViewModelBase {
       }).ConfigureAwait(true);
 
     results?.Dump();
+  }
+
+  public void ContactSelectionChange(object? sender, RoutedEventArgs e) {
+    //(e.Source as ContactListingControl)!.Selected.Dump();
+  }
+
+  public void ContactStarClick(object? sender, RoutedEventArgs e) {
+    //(e.Source as ContactListingControl)!.Selected.Dump(label: "Star Click");
+  }
+
+  public void ContactRemoveClick(object? sender, RoutedEventArgs e) {
+    //(e.Source as ContactListingControl)!.Selected.Dump(label: "Remove Click");
   }
 }
