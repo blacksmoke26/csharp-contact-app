@@ -21,21 +21,22 @@
             <StackPanel>
               <!-- Divider -->
               <Border Height="1" Margin="0 10"
-                Background="{DynamicResource MenuItemSeparatorBackground}"
+                Background="{DynamicResource DividerBorderBrush}"
                 IsVisible="{Binding ItemType, 
                 Converter={StaticResource SidebarItemTypeBoolConvertor},
                 ConverterParameter=Divider}" />
 
               <!-- Header -->
-              <TextBlock Margin="15 15 0 15" Text="{Binding Label}"
+              <TextBlock Margin="30 20 20 15" Text="{Binding Label}"
                 FontWeight="DemiBold"
+                Cursor="Arrow"
                 Foreground="{DynamicResource TextBlockDefaultForeground}"
                 IsVisible="{Binding ItemType, 
                 Converter={StaticResource SidebarItemTypeBoolConvertor},
                 ConverterParameter=Header}" />
 
-              <Button VerticalAlignment="Stretch" 
-                VerticalContentAlignment="Center" Margin="0 5 0 5"
+              <Button VerticalAlignment="Stretch"
+                VerticalContentAlignment="Center" Margin="15 5 15 5"
                 Transitions="{x:Null}" HorizontalContentAlignment="Left"
                 Classes="Large Tertiary"
                 Command="{Binding $parent[controls:SidebarControl].ItemOnClickCommand}"

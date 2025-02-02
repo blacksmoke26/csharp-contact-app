@@ -3,8 +3,12 @@
   xmlns:vm="using:ContactApp.Wpf.ViewModels"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:control="clr-namespace:ContactApp.Wpf.Controls" mc:Ignorable="d"
-  d:DesignWidth="1152" d:DesignHeight="900"
+  xmlns:control="clr-namespace:ContactApp.Wpf.Controls"
+  xmlns:v="clr-namespace:ContactApp.Wpf.Views" mc:Ignorable="d"
+  d:DesignWidth="800" d:DesignHeight="900"
+  Width="1250" MinWidth="1000"
+  MinHeight="950"
+  ExtendClientAreaToDecorationsHint="False" WindowStartupLocation="CenterScreen"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
   Background="{DynamicResource PrimaryBackground}"
   Icon="/Assets/avalonia-logo.ico" Title="Contacts Manager">
@@ -15,7 +19,7 @@
 
   <Grid Margin="30 30" RowDefinitions="Auto,*">
     <!-- Header -->
-    <Border Height="109" Margin="0 0 0 20" CornerRadius="4"
+    <Border Height="109" Margin="5 0 5 20" CornerRadius="4"
       Background="{StaticResource HeaderPrimaryBackground}" BorderThickness="0">
       <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch"
         VerticalAlignment="Top">
@@ -33,14 +37,18 @@
     </Border>
 
     <!-- Container -->
-    <Border Grid.Row="1" BorderBrush="Gray" Background="Transparent"
-      BorderThickness="1" CornerRadius="4">
+    <Border Grid.Row="1" Classes="Shadow" Theme="{StaticResource CardBorder}"
+      Padding="0" Background="Transparent" BorderThickness="1" CornerRadius="4">
       <Grid ColumnDefinitions="*, *, 2*">
-        <!-- Filters -->
-        <Border Cursor="Hand" BorderThickness=" 0 0 1 0" BorderBrush="Gray"
-          Padding="20 20 20 0">
+        <!-- Sidebar -->
+        <Border Cursor="Hand" BorderThickness=" 0 0 1 0"
+          BorderBrush="{DynamicResource DividerBorderBrush}">
           <StackPanel Spacing="15">
-            <Button Theme="{DynamicResource SolidButton}" Classes="Large"
+            <!-- New Contact Button -->
+            <Button
+              CornerRadius="6"
+              Margin="15 17 15 0 "
+              Theme="{DynamicResource SolidButton}" Classes="Secondary Large"
               HorizontalAlignment="Stretch" Content="New Contact"
               Command="{Binding OpenNewContactDialogCommand}" />
             <control:SidebarControl Items="{Binding SidebarItems}"
@@ -49,7 +57,8 @@
         </Border>
 
         <!-- Listing -->
-        <Border Grid.Column="1" BorderThickness=" 0 0 1 0" BorderBrush="Gray">
+        <Border Grid.Column="1" BorderThickness=" 0 0 1 0"
+          BorderBrush="{DynamicResource DividerBorderBrush}">
           <StackPanel Margin="5 15 5 0">
             <TextBox Classes="Bordered Large" Watermark="Search contact"
               Padding="13 0 10 0" Margin="10 0">
@@ -63,7 +72,7 @@
 
         <!-- Details -->
         <StackPanel Grid.Column="2">
-          <!--  -->
+          <v:ContactDetailsView />
         </StackPanel>
       </Grid>
     </Border>
