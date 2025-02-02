@@ -59,11 +59,11 @@ public partial class ContactFormViewModel : ObservableValidator {
 
     if (HasErrors) return null;
 
-    Contact contact = new() {
-      FirstName = FirstName!,
-      LastName = LastName!,
-      Department = Department?.Slug ?? string.Empty,
-
+    Contact contact = new(
+      FirstName!,
+      LastName!,
+      Department!
+    ) {
       Company = Company,
       Phone = Phone,
       Email = Email,
