@@ -1,0 +1,60 @@
+<ContentControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+  xmlns:controls="clr-namespace:ContactApp.Wpf.Controls"
+  xmlns:u="https://irihi.tech/ursa"
+  xmlns:mod="clr-namespace:ContactApp.Wpf.Models"
+  x:Class="ContactApp.Wpf.Controls.ContactListingControl" Content="{Binding}"
+  x:DataType="controls:ContactListingControl">
+
+  <ContentControl.Styles>
+    <StyleInclude Source="/Dicts/Styles.axaml" />
+  </ContentControl.Styles>
+
+  <ContentControl.Template>
+    <ControlTemplate TargetType="{x:Type controls:ContactListingControl}">
+      <ListBox
+        SelectedItem="{TemplateBinding Selected}"
+        ItemsSource="{TemplateBinding ItemsSource}"
+        SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type mod:Contact}">
+            <Grid ColumnDefinitions="Auto, *, Auto" Margin="0 3">
+              <u:Avatar Initialized="StyledElement_OnInitialized"
+                VerticalAlignment="Center"
+                Margin="0 0 15 0" />
+              <StackPanel Grid.Column="1" VerticalAlignment="Center"
+                Spacing="3">
+                <TextBlock Theme="{DynamicResource TitleTextBlock}"
+                  Classes="H6">
+                  <TextBlock Text="{Binding FirstName}" />
+                  <TextBlock Text="{Binding LastName}" />
+                </TextBlock>
+                <TextBlock Text="{Binding Department.Name}" FontSize="13" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10"
+                VerticalAlignment="Center">
+                <!-- Starred -->
+                <HyperlinkButton FontSize="17" FontWeight="Regular"
+                  Classes.StarRating="{Binding !IsStarred}"
+                  Classes.StarRatingFill="{Binding IsStarred}"
+                  Command="{Binding $parent[controls:ContactListingControl].StarButtonClickCommand}"
+                  CommandParameter="{Binding}"
+                  Content="&#xE46A;" />
+
+                <!-- Remove -->
+                <HyperlinkButton Cursor="Hand" FontSize="17" Margin="0 0"
+                  Foreground="#B5B5B5" FontWeight="Regular"
+                  FontFamily="{StaticResource Phosphor}" Content="&#xE4A6;"
+                  Command="{Binding $parent[controls:ContactListingControl].RemoveButtonClickCommand}"
+                  CommandParameter="{Binding}" />
+              </StackPanel>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </ControlTemplate>
+  </ContentControl.Template>
+</ContentControl>
