@@ -1,6 +1,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.Messaging;
 using ContactApp.Wpf.ViewModels;
 using ContactApp.Wpf.ViewModels.Forms;
 using ContactApp.Wpf.Views;
@@ -73,6 +74,7 @@ public partial class App : Application {
     services.AddSingleton<MainWindowViewModel>();
     services.AddTransient<ContactFormViewModel>();
     services.AddTransient<ContactDetailsViewModel>();
+    services.AddTransient<NoContactViewModel>();
 
     #endregion
 
@@ -84,6 +86,12 @@ public partial class App : Application {
           viewLocator: new ViewLocator()
         ), viewModelFactory: type => Ioc.Default.GetService(type)
       ));
+
+    #endregion
+
+    #region Miscellaneous
+
+    services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
     #endregion
 
