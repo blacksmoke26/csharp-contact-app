@@ -20,6 +20,7 @@ public class ViewLocator : ViewLocatorBase {
     RegisterViewFactory<MainWindowViewModel, MainWindow>();
     RegisterViewFactory<ContactFormViewModel, ContactFormView>();
     RegisterViewFactory<ContactDetailsViewModel, ContactDetailsView>();
+    RegisterViewFactory<NoContactViewModel, NoContactView>();
   }
 
   /// <summary>
