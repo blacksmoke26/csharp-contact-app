@@ -49,8 +49,15 @@
               Classes="Secondary Large" HorizontalAlignment="Stretch"
               Content="New Contact"
               Command="{Binding OpenNewContactDialogCommand}" />
-            <control:SidebarControl Items="{Binding SidebarItems}"
-              Selected="{Binding SidebarSelected}" />
+            <control:SidebarControl ItemsSource="{Binding SidebarItems}"
+              Selected="{Binding SidebarSelected}">
+              <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="SelectionChange">
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="SidebarSelectionChange" />
+                </ia:EventTriggerBehavior>
+              </i:Interaction.Behaviors>
+            </control:SidebarControl>
           </StackPanel>
         </Border>
 
@@ -65,19 +72,21 @@
                   Text="&#xE30C;" />
               </TextBox.InnerRightContent>
             </TextBox>
-            <control:ContactListingControl  x:Name="ContactsListing"
-              ItemsSource="{Binding ContactItems}">
+            <control:ContactListingControl ItemsSource="{Binding ContactItems}">
               <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="SelectionChange">
-                  <ia:CallMethodAction TargetObject="{Binding}" MethodName="ContactSelectionChange" />
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="ContactSelectionChange" />
                 </ia:EventTriggerBehavior>
-                
+
                 <ia:EventTriggerBehavior EventName="StarClick">
-                  <ia:CallMethodAction TargetObject="{Binding}" MethodName="ContactStarClick" />
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="ContactStarClick" />
                 </ia:EventTriggerBehavior>
-                
+
                 <ia:EventTriggerBehavior EventName="RemoveClick">
-                  <ia:CallMethodAction TargetObject="{Binding}" MethodName="ContactRemoveClick" />
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="ContactRemoveClick" />
                 </ia:EventTriggerBehavior>
               </i:Interaction.Behaviors>
             </control:ContactListingControl>
