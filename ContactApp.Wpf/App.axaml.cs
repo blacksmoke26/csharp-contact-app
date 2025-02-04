@@ -10,17 +10,16 @@ using HanumanInstitute.MvvmDialogs.Avalonia;
 
 namespace ContactApp.Wpf;
 
-public partial class App : Application {
+public class App : Application {
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
   }
 
   public override void OnFrameworkInitializationCompleted() {
-    ViewLocator locator = new();
-    DataTemplates.Add(locator);
-
     // configure services
     ConfigureServices();
+
+    DataTemplates.Add(Ioc.Default.GetRequiredService<ViewLocator>());
 
     // Remove vanilla validation plugins
 
@@ -71,10 +70,11 @@ public partial class App : Application {
 
     #region View Models
 
+    services.AddSingleton<ViewLocator>();
     services.AddSingleton<MainWindowViewModel>();
     services.AddTransient<ContactFormViewModel>();
-    services.AddTransient<ContactDetailsViewModel>();
-    services.AddTransient<NoContactViewModel>();
+    services.AddSingleton<ContactDetailsViewModel>();
+    services.AddSingleton<NoContactViewModel>();
 
     #endregion
 
@@ -84,8 +84,10 @@ public partial class App : Application {
       new DialogService(new DialogManager(
           dialogFactory: new DialogFactory().AddDialogHost().AddMessageBox(),
           viewLocator: new ViewLocator()
-        ), viewModelFactory: type => Ioc.Default.GetService(type)
-      ));
+        ),
+        viewModelFactory: type => Ioc.Default.GetService(type)
+      )
+    );
 
     #endregion
 
