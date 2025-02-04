@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Data;
 
 namespace ContactApp.Wpf.Controls;
@@ -9,24 +8,26 @@ namespace ContactApp.Wpf.Controls;
 public partial class SidebarControl : ContentControl {
   #region Property: Selected
 
-  private string _selected = string.Empty;
+  private string? _selected = string.Empty;
 
-  public static readonly DirectProperty<SidebarControl, string> SelectedProperty =
-    AvaloniaProperty.RegisterDirect<SidebarControl, string>(
+  public static readonly DirectProperty<SidebarControl, string?> SelectedProperty =
+    AvaloniaProperty.RegisterDirect<SidebarControl, string?>(
       nameof(Selected), o => o.Selected, (o, v) => o.Selected = v, defaultBindingMode: BindingMode.TwoWay);
 
   /// <summary>
   /// Item ID to be highlighted
   /// </summary>
-  public string Selected {
+  public string? Selected {
     get => _selected;
     set {
-      if (SetAndRaise(SelectedProperty, ref _selected, value)) {
-        foreach (var item in Items)
-          // Reason: To reflect the two-way bindings and clear the current selection
-          item.IsSelected = value == item.Id;
-        RaiseEvent(new RoutedEventArgs(SelectedChangeEvent));
-      }
+      if (!SetAndRaise(SelectedProperty, ref _selected, value)) return;
+
+      foreach (var item in ItemsSource)
+        // Reason: To reflect the two-way bindings and clear the current selection
+        item.IsSelected = value == item.Id;
+
+      // trigger event
+      RaiseEvent(new RoutedEventArgs(SelectionChangeEvent));
     }
   }
 
@@ -34,31 +35,31 @@ public partial class SidebarControl : ContentControl {
 
   #region Property: Items
 
-  private ObservableCollection<SidebarItem> _items = [];
+  private ObservableCollection<SidebarItem> _itemsSource = [];
 
-  public static readonly DirectProperty<SidebarControl, ObservableCollection<SidebarItem>> ItemsProperty =
+  public static readonly DirectProperty<SidebarControl, ObservableCollection<SidebarItem>> ItemsSourceProperty =
     AvaloniaProperty.RegisterDirect<SidebarControl, ObservableCollection<SidebarItem>>(
-      nameof(Items), o => o.Items, (o, v) => o.Items = v);
+      nameof(ItemsSource), o => o.ItemsSource, (o, v) => o.ItemsSource = v);
 
   /// <summary>
   /// Items List
   /// </summary>
-  public ObservableCollection<SidebarItem> Items {
-    get => _items;
-    set => SetAndRaise(ItemsProperty, ref _items, value);
+  public ObservableCollection<SidebarItem> ItemsSource {
+    get => _itemsSource;
+    set => SetAndRaise(ItemsSourceProperty, ref _itemsSource, value);
   }
 
   #endregion
 
-  public static readonly RoutedEvent<RoutedEventArgs> SelectedChangeEvent =
-    RoutedEvent.Register<SidebarControl, RoutedEventArgs>(nameof(SelectedChange), RoutingStrategies.Bubble);
+  public static readonly RoutedEvent<RoutedEventArgs> SelectionChangeEvent =
+    RoutedEvent.Register<SidebarControl, RoutedEventArgs>(nameof(SelectionChange), RoutingStrategies.Direct);
 
   /// <summary>
-  /// Trigger the event when Selected value changes
+  /// Trigger the event when selected value changes
   /// </summary>
-  public event EventHandler<RoutedEventArgs> SelectedChange {
-    add => AddHandler(SelectedChangeEvent, value);
-    remove => RemoveHandler(SelectedChangeEvent, value);
+  public event EventHandler<RoutedEventArgs> SelectionChange {
+    add => AddHandler(SelectionChangeEvent, value);
+    remove => RemoveHandler(SelectionChangeEvent, value);
   }
 
   public SidebarControl() {
@@ -66,7 +67,7 @@ public partial class SidebarControl : ContentControl {
   }
 
   [RelayCommand]
-  private void ItemOnClick(SidebarItem itemId) {
-    Selected = itemId.Id ?? string.Empty;
+  private void ItemOnClick(SidebarItem? itemId) {
+    Selected = itemId?.Id ?? string.Empty;
   }
 }

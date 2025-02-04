@@ -15,7 +15,7 @@
 
   <ContentControl.Template>
     <ControlTemplate>
-      <ItemsControl ItemsSource="{TemplateBinding Items}">
+      <ItemsControl ItemsSource="{TemplateBinding ItemsSource}">
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="{x:Type mod:SidebarItem}">
             <StackPanel>
@@ -35,6 +35,7 @@
                 Converter={StaticResource SidebarItemTypeBoolConvertor},
                 ConverterParameter=Header}" />
 
+              <!-- Button -->
               <Button VerticalAlignment="Stretch"
                 VerticalContentAlignment="Center" Margin="15 5 15 5"
                 Transitions="{x:Null}" HorizontalContentAlignment="Left"
