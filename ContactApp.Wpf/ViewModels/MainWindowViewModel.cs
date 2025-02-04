@@ -1,7 +1,6 @@
 ﻿using Avalonia.Media;
+using ContactApp.Wpf.Controls;
 using ContactApp.Wpf.ViewModels.Forms;
-using ContactApp.Wpf.Views;
-using Dumpify;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.Avalonia.DialogHost;
 
@@ -10,15 +9,30 @@ namespace ContactApp.Wpf.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase {
   [ObservableProperty] private string _label = string.Empty;
 
-  [ObservableProperty] private string? _sidebarSelected = "All";
+  [ObservableProperty] private string? _sidebarSelected = "all";
   [ObservableProperty] private Contact? _contactSelected;
   [ObservableProperty] private ObservableCollection<Contact> _contactItems = [];
   [ObservableProperty] private ObservableCollection<SidebarItem> _sidebarItems = [];
 
-  [ObservableProperty] private ContentControl _detailsView = new NoContactView();
+  [ObservableProperty] private Control? _detailsView;
 
   public MainWindowViewModel() {
+    DetailsView = Ioc.Default.GetRequiredService<ViewLocator>().CreateView<NoContactViewModel>();
     _ = InitializeSidebarItems();
+  }
+
+  partial void OnContactSelectedChanged(Contact? value) {
+    var viewLocator = Ioc.Default.GetRequiredService<ViewLocator>();
+    
+    // No contact selected, sets the placeholder view
+    if (value == null) {
+      DetailsView = viewLocator.CreateView<NoContactViewModel>();
+      return;
+    }
+
+    // Contact details
+    DetailsView = viewLocator.CreateView<ContactDetailsViewModel>
+      (vm => vm.Contact = value);
   }
 
   /// <summary>
@@ -47,24 +61,38 @@ public partial class MainWindowViewModel : ViewModelBase {
     Application.Current!.Resources.TryGetResource("DialogOverlayBackground", Application.Current.ActualThemeVariant,
       out var dialogOverlayBackground);
 
-    var results = await dialogService
+    _ = await dialogService
       .ShowDialogHostAsync(this, new DialogHostSettings(dialogViewModel) {
         DialogMargin = new Thickness(0),
         OverlayBackground = (SolidColorBrush)dialogOverlayBackground!
       }).ConfigureAwait(true);
-
-    results?.Dump();
   }
 
-  public void ContactSelectionChange(object? sender, RoutedEventArgs e) {
-    //(e.Source as ContactListingControl)!.Selected.Dump();
+  /// <summary>
+  /// Event: Triggered when sidebar item is clicked
+  /// </summary>
+  public void SidebarSelectionChange(object? _, RoutedEventArgs e) {
+    SidebarSelected = (e.Source as SidebarControl)?.Selected;
   }
 
-  public void ContactStarClick(object? sender, RoutedEventArgs e) {
-    //(e.Source as ContactListingControl)!.Selected.Dump(label: "Star Click");
+  /// <summary>
+  /// Event: Triggered when contact selection is changed
+  /// </summary>
+  public void ContactSelectionChange(object? _, RoutedEventArgs e) {
+    ContactSelected = (e.Source as ContactListingControl)?.Selected;
   }
 
-  public void ContactRemoveClick(object? sender, RoutedEventArgs e) {
-    //(e.Source as ContactListingControl)!.Selected.Dump(label: "Remove Click");
+  /// <summary>
+  /// Event: Triggered when contact star button is clicked
+  /// </summary>
+  public void ContactStarClick(object? _, RoutedEventArgs e) {
+    ContactSelected = (e.Source as ContactListingControl)?.Selected;
+  }
+
+  /// <summary>
+  /// Event: Triggered when contact remove button is clicked
+  /// </summary>
+  public void ContactRemoveClick(object? _, RoutedEventArgs e) {
+    ContactSelected = (e.Source as ContactListingControl)?.Selected;
   }
 }
