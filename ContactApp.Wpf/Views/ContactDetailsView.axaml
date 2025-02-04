@@ -1,22 +1,23 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<ContentControl xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels" mc:Ignorable="d"
-  xmlns:u="https://irihi.tech/ursa" d:DesignWidth="550" d:DesignHeight="700"
-  d:DataContext="vm:ContactDetailsViewModel"
+  xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels"
+  xmlns:conv="clr-namespace:ContactApp.Wpf.Convertors"
+  xmlns:u="https://irihi.tech/ursa" mc:Ignorable="d" d:DesignWidth="550"
+  d:DesignHeight="700" d:DataContext="vm:ContactDetailsViewModel"
   x:Class="ContactApp.Wpf.Views.ContactDetailsView"
   Background="{DynamicResource DialogPrimaryBackground}"
-  x:DataType="vm:ContactDetailsViewModel">
+  x:DataType="vm:ContactDetailsViewModel" x:CompileBindings="True">
 
-  <UserControl.DataContext>
-    <vm:ContactDetailsViewModel />
-  </UserControl.DataContext>
+  <ContentControl.Resources>
+    <conv:PhoneNumberConvertor x:Key="PhoneNumberConvertor" />
+  </ContentControl.Resources>
 
-  <UserControl.Styles>
+  <ContentControl.Styles>
     <Style Selector="HyperlinkButton.StarRating">
-      <Setter Property="FontFamily" Value="{StaticResource Phosphor}"></Setter>
-      <Setter Property="Foreground" Value="{DynamicResource RatingForeground}"></Setter>
+      <Setter Property="FontFamily" Value="{StaticResource Phosphor}"/>
+      <Setter Property="Foreground" Value="#B5B5B5"/>
     </Style>
 
     <Style Selector="HyperlinkButton.StarRatingFill">
@@ -25,7 +26,7 @@
         Value="{DynamicResource RatingForegroundFill}">
       </Setter>
     </Style>
-  </UserControl.Styles>
+  </ContentControl.Styles>
 
   <StackPanel>
     <!-- Header -->
@@ -40,9 +41,8 @@
           Content="&#xE3B4;" />
         <!-- Starred -->
         <HyperlinkButton FontSize="17" FontWeight="Regular"
-          Classes.StarRating="{Binding !IsStarred}"
-          Classes.StarRatingFill="{Binding IsStarred}"
-          Content="&#xE46A;" />
+          Classes.StarRating="{Binding !Contact.IsStarred}"
+          Classes.StarRatingFill="{Binding Contact.IsStarred}" Content="&#xE46A;" />
         <!-- Remove -->
         <HyperlinkButton Cursor="Hand" FontSize="17" Foreground="#B5B5B5"
           FontWeight="Regular" FontFamily="{StaticResource Phosphor}"
@@ -52,51 +52,55 @@
 
     <!-- Separator -->
     <u:Divider Margin="0 25" />
-
+    
     <!-- Details -->
     <StackPanel Spacing="30" Margin="20 0">
       <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
         <u:Avatar Width="72" Height="72" Margin="0 0 15 0" />
         <StackPanel Grid.Column="1" Spacing="3" Margin=" 0 5 0 0">
-          <TextBlock Theme="{DynamicResource TitleTextBlock}" Classes="H6"
-            Text="Jeneva Bridgeforth" />
-          <TextBlock FontSize="13" Text="Engineering" />
-          <TextBlock FontSize="13" Text="Fay LLC" />
+          <TextBlock Theme="{DynamicResource TitleTextBlock}" Classes="H6">
+            <TextBlock Text="{Binding Contact.FirstName}" />
+            <TextBlock Text="{Binding Contact.LastName}" />
+          </TextBlock>
+          <TextBlock FontSize="13" Text="{Binding Contact.Department.Name}" />
+          <TextBlock FontSize="13"
+            Text="{Binding Contact.Company, FallbackValue='-'}" />
         </StackPanel>
       </Grid>
 
       <Grid ColumnDefinitions="*,*" VerticalAlignment="Center" Margin="5 0">
         <StackPanel Grid.Column="0" Spacing="3">
           <TextBlock FontSize="12" Text="Phone Number" />
-          <TextBlock FontWeight="SemiBold" Text="+92-345-5776662" />
+          <TextBlock FontWeight="SemiBold"
+            Text="{Binding Contact.Phone, Converter={StaticResource PhoneNumberConvertor}, FallbackValue='-'}" />
         </StackPanel>
         <StackPanel Grid.Column="1" Spacing="3">
           <TextBlock FontSize="12" Text="Email address" />
-          <TextBlock FontWeight="SemiBold" Text="Bridgette890@claimab.com" />
+          <TextBlock FontWeight="SemiBold" Text="{Binding Contact.Email, FallbackValue='-'}" />
         </StackPanel>
       </Grid>
 
       <StackPanel Spacing="3" Margin="5 0">
         <TextBlock FontSize="12" Text="Address" />
         <TextBlock FontWeight="SemiBold"
-          Text="Nathan K. Flores 1516 Holt Street West Palm" />
+          Text="{Binding Contact.Address, FallbackValue='-'}" />
       </StackPanel>
 
       <Grid ColumnDefinitions="*,*" VerticalAlignment="Center" Margin="5 0">
         <StackPanel Grid.Column="0" Spacing="3">
           <TextBlock FontSize="12" Text="Department" />
-          <TextBlock FontWeight="SemiBold" Text="Engineering" />
+          <TextBlock FontWeight="SemiBold" Text="{Binding Contact.Department.Name, FallbackValue='-'}" />
         </StackPanel>
         <StackPanel Grid.Column="1" Spacing="3">
           <TextBlock FontSize="12" Text="Company" />
-          <TextBlock FontWeight="SemiBold" Text="Fay LLC" />
+          <TextBlock FontWeight="SemiBold" Text="{Binding Contact.Company, FallbackValue='-'}" />
         </StackPanel>
       </Grid>
 
       <StackPanel Spacing="3" Margin="5 0">
         <TextBlock FontSize="12" Text="Notes" />
         <TextBlock TextWrapping="Wrap" LineHeight="23"
-          Text="Ina opju kihinu dib woh cojvucar zuvtug libmivcem ronluddoh co jo sihuwis. Doekreh gajtawu bisbeje cid ij ri ri jalkoffas nilwuhfem niz tudouwi fehcakaz juzo iwgow." />
+          Text="{Binding Contact.Notes, FallbackValue='-'}" />
       </StackPanel>
 
     </StackPanel>
@@ -111,4 +115,4 @@
         Content="Delete" />
     </StackPanel>
   </StackPanel>
-</UserControl>
+</ContentControl>
