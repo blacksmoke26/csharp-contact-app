@@ -11,7 +11,7 @@ public class ViewLocator : ViewLocatorBase {
   /// Lookup ViewModel~View Dictionary for view instances 
   /// </summary>
   private readonly Dictionary<Type, Func<Control>> _locator = new();
-  
+
   /// <inheritdoc />
   protected override string GetViewName(object viewModel) => viewModel.GetType().FullName!.Replace("ViewModel", "View");
 
@@ -34,7 +34,7 @@ public class ViewLocator : ViewLocatorBase {
 
     return factory.Invoke();
   }
-  
+
   /// <summary>
   /// Checks whatever the given object is a ViewModel instance
   /// </summary>
@@ -52,7 +52,22 @@ public class ViewLocator : ViewLocatorBase {
     where TView : Control {
     _locator.Add(typeof(TViewModel), Activator.CreateInstance<TView>);
   }
-  
+
   /// <inheritdoc cref="Build"/>
   public override object Create(object viewModel) => Build(viewModel);
+
+  /// <summary>
+  /// Creates view instances based on the view-model
+  /// </summary>
+  /// <param name="fn">A callback function to manipulate created instance</param>
+  /// <typeparam name="TViewModel">ViewModel class</typeparam>
+  /// <returns>The created view instance</returns>
+  public Control CreateView<TViewModel>(Action<TViewModel>? fn = null)
+    where TViewModel : class {
+    var viewModel = Ioc.Default.GetRequiredService<TViewModel>();
+    fn?.Invoke(viewModel);
+    var control = Build(viewModel);
+    control.DataContext = viewModel;
+    return control;
+  }
 }
