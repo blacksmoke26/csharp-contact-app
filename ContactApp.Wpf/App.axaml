@@ -2,7 +2,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:semi="https://irihi.tech/semi"
   xmlns:ursa="https://irihi.tech/ursa/themes/semi"
-  xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
   xmlns:local="using:ContactApp.Wpf" RequestedThemeVariant="Dark"
   x:Class="ContactApp.Wpf.App">
   <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -13,8 +12,8 @@
 
   <Application.Styles>
     <semi:SemiTheme Locale="en-US" />
+    <semi:SemiPopupAnimations/>
     <ursa:SemiTheme Locale="en-US"/>
-    <dialogHostAvalonia:DialogHostStyles />
   </Application.Styles>
 
   <Application.Resources>
