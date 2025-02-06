@@ -1,14 +1,16 @@
-﻿using Avalonia.Media;
+﻿// Licensed to the end users under one or more agreements.
+// Copyright (c) 2025 Junaid Atari, and contributors
+// Website: https://github.com/blacksmoke26/
+
 using ContactApp.Wpf.Controls;
 using ContactApp.Wpf.ViewModels.Forms;
-using HanumanInstitute.MvvmDialogs;
-using HanumanInstitute.MvvmDialogs.Avalonia.DialogHost;
+using ContactApp.Wpf.Views.Forms;
+using Dumpify;
+using Ursa.Controls;
 
 namespace ContactApp.Wpf.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase {
-  [ObservableProperty] private string _label = string.Empty;
-
   [ObservableProperty] private string? _sidebarSelected = "all";
   [ObservableProperty] private Contact? _contactSelected;
   [ObservableProperty] private ObservableCollection<Contact> _contactItems = [];
@@ -23,7 +25,7 @@ public partial class MainWindowViewModel : ViewModelBase {
 
   partial void OnContactSelectedChanged(Contact? value) {
     var viewLocator = Ioc.Default.GetRequiredService<ViewLocator>();
-    
+
     // No contact selected, sets the placeholder view
     if (value == null) {
       DetailsView = viewLocator.CreateView<NoContactViewModel>();
@@ -45,27 +47,27 @@ public partial class MainWindowViewModel : ViewModelBase {
     sidebarItems.AddRange(departments.Select(x => SidebarItem.FromDepartment(x)));
 
     sidebarItems.ForEach(SidebarItems.Add);
-    // contacts
+
+    // fetch contacts and add them to existing list
     var contacts = await Contact.FetchPredefinedAsync();
     contacts.ForEach(ContactItems.Add);
   }
 
-  /// <summary>
-  /// Opens the new contact dialog
-  /// </summary>
   [RelayCommand]
-  private async Task OpenNewContactDialog() {
-    var dialogService = Ioc.Default.GetRequiredService<IDialogService>();
-    var dialogViewModel = dialogService.CreateViewModel<ContactFormViewModel>();
+  private async Task ShowNewContactDialog() {
+    var instance = Ioc.Default.GetRequiredService<ContactFormViewModel>();
 
-    Application.Current!.Resources.TryGetResource("DialogOverlayBackground", Application.Current.ActualThemeVariant,
-      out var dialogOverlayBackground);
+    await OverlayDialog.ShowModal<ContactFormView, ContactFormViewModel>(instance,
+      options: new OverlayDialogOptions() {
+        Title = "New Contact",
+        Buttons = DialogButton.None,
+        HorizontalAnchor = HorizontalPosition.Center,
+      }
+    );
 
-    _ = await dialogService
-      .ShowDialogHostAsync(this, new DialogHostSettings(dialogViewModel) {
-        DialogMargin = new Thickness(0),
-        OverlayBackground = (SolidColorBrush)dialogOverlayBackground!
-      }).ConfigureAwait(true);
+    if (instance.IsFormSubmitted()) {
+      instance.GetFormData().Dump();
+    }
   }
 
   /// <summary>
@@ -87,6 +89,9 @@ public partial class MainWindowViewModel : ViewModelBase {
   /// </summary>
   public void ContactStarClick(object? _, RoutedEventArgs e) {
     ContactSelected = (e.Source as ContactListingControl)?.Selected;
+    if (ContactSelected != null) {
+      ContactSelected.IsStarred = !ContactSelected.IsStarred;
+    }
   }
 
   /// <summary>

@@ -2,108 +2,97 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+  xmlns:u="https://irihi.tech/ursa"
   xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels.Forms"
   xmlns:mod="clr-namespace:ContactApp.Wpf.Models" mc:Ignorable="d"
-  d:DesignWidth="600" d:DesignHeight="650"
+  d:DesignWidth="600" d:DesignHeight="800"
   d:DataContext="vm:ContactFormViewModel"
-  x:Class="ContactApp.Wpf.Views.Forms.ContactFormView"
-  Background="{DynamicResource DialogPrimaryBackground}" Width="600"
+  x:Class="ContactApp.Wpf.Views.Forms.ContactFormView" Width="600"
   x:DataType="vm:ContactFormViewModel">
 
-  <UserControl.DataContext>
+  <Design.DataContext>
     <vm:ContactFormViewModel />
-  </UserControl.DataContext>
+  </Design.DataContext>
 
-  <StackPanel Spacing="20" Margin="20">
-    <Grid ColumnDefinitions="*, *" VerticalAlignment="Center">
-      <Label Theme="{DynamicResource TitleLabel}" Classes="H4"
-        FontWeight="Regular" Content="Add New Contact" />
-      <HyperlinkButton Grid.Column="1"
-        HorizontalAlignment="Right"
-        Foreground="{DynamicResource TextBlockDefaultForeground}"
-        FontFamily="{StaticResource Phosphor}" Content="&#xE4F6;"
-        FontSize="18"
-        HorizontalContentAlignment="Right"
-        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
-        CommandParameter="true" />
-    </Grid>
+  <u:DisableContainer IsEnabled="{Binding !FormSubmitCommand.IsRunning}">
+    <StackPanel Spacing="20" Margin="0 5">
+      <TextBlock MaxLines="2" TextWrapping="NoWrap" Classes="Tertiary">
+        Lets add new contact for your application. Fill all the fields
+        <LineBreak />
+        and click on the Submit button.
+      </TextBlock>
 
-    <TextBlock MaxLines="2" TextWrapping="NoWrap" Classes="Tertiary">
-      Lets add new contact for your application. Fill all the fields
-      <LineBreak />
-      and click on the Submit button.
-    </TextBlock>
+      <StackPanel Spacing="25">
+        <Grid ColumnDefinitions="*, 25, *">
+          <StackPanel>
+            <Label Content="FirstName*" Margin="0 0 0 5" />
+            <TextBox Classes="Bordered" Watermark="John"
+              u:FocusHelper.DialogFocusHint="True" Text="{Binding FirstName}" />
+          </StackPanel>
 
-    <StackPanel Spacing="25">
-      <Grid ColumnDefinitions="*, 25, *">
+          <StackPanel Grid.Column="2">
+            <Label Content="LastName*" Margin="0 0 0 5" />
+            <TextBox Classes="Bordered" Watermark="Doe"
+              Text="{Binding LastName}" />
+          </StackPanel>
+        </Grid>
+        <Grid ColumnDefinitions="*, 25, *">
+          <StackPanel>
+            <Label Content="Department*" Margin="0 0 0 5" />
+            <ComboBox PlaceholderText="Choose" Classes="Bordered"
+              ItemsSource="{Binding Departments}"
+              SelectedItem="{Binding Department}" HorizontalAlignment="Stretch">
+              <ComboBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type mod:Department}">
+                  <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
+
+          <StackPanel Grid.Column="2">
+            <Label Content="Company" Margin="0 0 0 5" />
+            <TextBox Classes="Bordered" Watermark="Acme Inc."
+              Text="{Binding Company}" />
+          </StackPanel>
+        </Grid>
+        <Grid ColumnDefinitions="*, 25, *">
+          <StackPanel>
+            <Label Content="Phone" Margin="0 0 0 5" />
+            <MaskedTextBox Classes="Bordered" Mask="(+09) 000 0000000"
+              Text="{Binding Phone}" />
+          </StackPanel>
+
+          <StackPanel Grid.Column="2">
+            <Label Content="Email" Margin="0 0 0 5" />
+            <TextBox Classes="Bordered" Watermark="john.doe@domain.com"
+              Text="{Binding Email}" />
+          </StackPanel>
+        </Grid>
+
         <StackPanel>
-          <Label Content="FirstName*" Margin="0 0 0 5" />
-          <TextBox Classes="Bordered" Watermark="John"
-            Text="{Binding FirstName}" />
+          <Label Content="Address" Margin="0 0 0 5" />
+          <TextBox AcceptsReturn="True" TextWrapping="Wrap"
+            VerticalContentAlignment="Top" Padding="10" MaxLines="2"
+            Height="60" Classes="Bordered" Watermark=""
+            Text="{Binding Address}" />
         </StackPanel>
 
-        <StackPanel Grid.Column="2">
-          <Label Content="LastName*" Margin="0 0 0 5" />
-          <TextBox Classes="Bordered" Watermark="Doe" Text="{Binding LastName}" />
-        </StackPanel>
-      </Grid>
-      <Grid ColumnDefinitions="*, 25, *">
         <StackPanel>
-          <Label Content="Department*" Margin="0 0 0 5" />
-          <ComboBox PlaceholderText="Choose" Classes="Bordered" ItemsSource="{Binding Departments}"
-            SelectedItem="{Binding Department}" HorizontalAlignment="Stretch">
-            <ComboBox.ItemTemplate>
-              <DataTemplate DataType="{x:Type mod:Department}">
-                <TextBlock Text="{Binding Name}"/>
-              </DataTemplate>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
+          <Label Content="Notes" Margin="0 0 0 5" />
+          <TextBox AcceptsReturn="True" TextWrapping="Wrap"
+            VerticalContentAlignment="Top" Padding="10" Height="80"
+            Classes="Bordered" Watermark="" Text="{Binding Notes}" />
         </StackPanel>
-
-        <StackPanel Grid.Column="2">
-          <Label Content="Company" Margin="0 0 0 5" />
-          <TextBox Classes="Bordered" Watermark="Acme Inc."
-            Text="{Binding Company}" />
-        </StackPanel>
-      </Grid>
-      <Grid ColumnDefinitions="*, 25, *">
-        <StackPanel>
-          <Label Content="Phone" Margin="0 0 0 5" />
-          <MaskedTextBox Classes="Bordered" Mask="(+09) 000 0000000"
-            Text="{Binding Phone}" />
-        </StackPanel>
-
-        <StackPanel Grid.Column="2">
-          <Label Content="Email" Margin="0 0 0 5" />
-          <TextBox Classes="Bordered" Watermark="john.doe@domain.com"
-            Text="{Binding Email}" />
-        </StackPanel>
-      </Grid>
-
-      <StackPanel>
-        <Label Content="Address" Margin="0 0 0 5" />
-        <TextBox AcceptsReturn="True" TextWrapping="Wrap"
-          VerticalContentAlignment="Top" Padding="10" MaxLines="2" Height="60"
-          Classes="Bordered" Watermark="" Text="{Binding Address}" />
       </StackPanel>
 
-      <StackPanel>
-        <Label Content="Notes" Margin="0 0 0 5" />
-        <TextBox AcceptsReturn="True" TextWrapping="Wrap"
-          VerticalContentAlignment="Top" Padding="10" Height="80"
-          Classes="Bordered" Watermark="" Text="{Binding Notes}" />
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <Button Command="{Binding FormSubmitCommand}"
+          Theme="{DynamicResource SolidButton}" Width="80" Content="Save" />
+        <Button Theme="{DynamicResource SolidButton}" Classes="Danger"
+          Content="Discard" Command="{Binding FormDiscardCommand}" />
       </StackPanel>
     </StackPanel>
+  </u:DisableContainer>
 
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0 10 ">
-      <Button
-        Command="{Binding SaveCommand}"
-        Theme="{DynamicResource SolidButton}" Width="80" Content="Save" />
-      <Button Theme="{DynamicResource SolidButton}" Classes="Danger"
-        Content="Discard"
-        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
-        CommandParameter="true" />
-    </StackPanel>
-  </StackPanel>
 </UserControl>

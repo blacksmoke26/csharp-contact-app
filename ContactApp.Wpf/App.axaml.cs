@@ -1,3 +1,7 @@
+// Licensed to the end users under one or more agreements.
+// Copyright (c) 2025 Junaid Atari, and contributors
+// Website: https://github.com/blacksmoke26/
+
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
@@ -5,8 +9,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using ContactApp.Wpf.ViewModels;
 using ContactApp.Wpf.ViewModels.Forms;
 using ContactApp.Wpf.Views;
-using HanumanInstitute.MvvmDialogs;
-using HanumanInstitute.MvvmDialogs.Avalonia;
 
 namespace ContactApp.Wpf;
 
@@ -75,19 +77,6 @@ public class App : Application {
     services.AddTransient<ContactFormViewModel>();
     services.AddSingleton<ContactDetailsViewModel>();
     services.AddSingleton<NoContactViewModel>();
-
-    #endregion
-
-    #region View Dialogs
-
-    services.AddSingleton<IDialogService>(
-      new DialogService(new DialogManager(
-          dialogFactory: new DialogFactory().AddDialogHost().AddMessageBox(),
-          viewLocator: new ViewLocator()
-        ),
-        viewModelFactory: type => Ioc.Default.GetService(type)
-      )
-    );
 
     #endregion
 

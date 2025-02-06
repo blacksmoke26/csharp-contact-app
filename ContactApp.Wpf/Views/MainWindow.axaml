@@ -1,103 +1,125 @@
-<Window xmlns="https://github.com/avaloniaui"
+<u:UrsaWindow xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:vm="using:ContactApp.Wpf.ViewModels"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:u="https://irihi.tech/ursa"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:control="clr-namespace:ContactApp.Wpf.Controls"
   xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
   xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="900" Width="1250"
-  MinWidth="1000" MinHeight="950" ExtendClientAreaToDecorationsHint="False"
+  MinWidth="1000" MinHeight="950" x:CompileBindings="True"
   WindowStartupLocation="CenterScreen"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
   Background="{DynamicResource PrimaryBackground}"
-  Icon="/Assets/avalonia-logo.ico" Title="Contacts Manager">
+  ExtendClientAreaChromeHints="NoChrome" CanResize="True"
+  ExtendClientAreaTitleBarHeightHint="-1"
+  ExtendClientAreaToDecorationsHint="True" SystemDecorations="None"
+  TitleBarContent="" Icon="/Assets/avalonia-logo.ico"
+  BorderThickness="1" BorderBrush="#101010"
+  IsManagedResizerVisible="True"
+  TitleBarMargin="15 5 15 0">
 
+  <u:UrsaWindow.LeftContent>
+    <TextBlock Text="Contacts Manager" Padding="0 7 0 0"/>
+  </u:UrsaWindow.LeftContent>
+  
   <Design.DataContext>
     <vm:MainWindowViewModel />
   </Design.DataContext>
 
-  <Grid Margin="30 30" RowDefinitions="Auto,*">
-    <!-- Header -->
-    <Border Height="109" Margin="3 0 3 20" CornerRadius="4"
-      Background="{StaticResource HeaderPrimaryBackground}" BorderThickness="0">
-      <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch"
-        VerticalAlignment="Top">
-        <StackPanel Spacing="3" Margin="25 25 0 0">
-          <Label Theme="{DynamicResource TitleLabel}" Classes="H3"
-            Content="Contact app" />
-          <Label FontSize="16" FontWeight="Light" Content="List Your Contacts" />
-        </StackPanel>
-        <Border Grid.Column="1" ClipToBounds="True" Height="109"
-          HorizontalAlignment="Right" Margin="0 0 25 0">
-          <Image Source="/Assets/Images/ChatBc.webp" Width="165" Height="165"
-            VerticalAlignment="Top" />
-        </Border>
-      </Grid>
-    </Border>
-
-    <!-- Container -->
-    <Border Grid.Row="1" Classes="Shadow" Theme="{StaticResource CardBorder}"
-      Padding="0" Background="Transparent" BorderThickness="1" CornerRadius="4">
-      <Grid ColumnDefinitions="*, *, 2*">
-        <!-- Sidebar -->
-        <Border BorderThickness=" 0 0 1 0"
-          BorderBrush="{DynamicResource DividerBorderBrush}">
-          <StackPanel Spacing="15">
-            <!-- New Contact Button -->
-            <Button Margin="15 17 15 0 " Theme="{DynamicResource SolidButton}"
-              Classes="Secondary Large" HorizontalAlignment="Stretch"
-              Content="New Contact"
-              Command="{Binding OpenNewContactDialogCommand}" />
-            <control:SidebarControl ItemsSource="{Binding SidebarItems}"
-              Selected="{Binding SidebarSelected}">
-              <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="SelectionChange">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="SidebarSelectionChange" />
-                </ia:EventTriggerBehavior>
-              </i:Interaction.Behaviors>
-            </control:SidebarControl>
+  <Panel Margin="0 45 0 0">
+    <Panel.Styles>
+      <Style Selector="Grid.Blur">
+        <Setter Property="Effect" Value="blur(10)"></Setter>
+      </Style>
+    </Panel.Styles>
+    <Grid Margin="10 0 10 10" RowDefinitions="Auto,*"
+      Classes.Blur="{Binding $parent[u:UrsaWindow].(u:OverlayDialogHost.IsInModalStatus)}">
+      <!-- Header -->
+      <Border Height="109" Margin="3 0 3 20" CornerRadius="4"
+        Background="{StaticResource HeaderPrimaryBackground}"
+        BorderThickness="0">
+        <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch"
+          VerticalAlignment="Top">
+          <StackPanel Spacing="3" Margin="25 25 0 0">
+            <Label Theme="{DynamicResource TitleLabel}" Classes="H3"
+              Content="Contact app" />
+            <Label FontSize="16" FontWeight="Light"
+              Content="List Your Contacts" />
           </StackPanel>
-        </Border>
+          <Border Grid.Column="1" ClipToBounds="True" Height="109"
+            HorizontalAlignment="Right" Margin="0 0 25 0">
+            <Image Source="/Assets/Images/ChatBc.webp" Width="165" Height="165"
+              VerticalAlignment="Top" />
+          </Border>
+        </Grid>
+      </Border>
 
-        <!-- Listing -->
-        <Border Grid.Column="1" BorderThickness="0 0 1 0"
-          BorderBrush="{DynamicResource DividerBorderBrush}">
-          <StackPanel Spacing="10" Margin="0 15 0 0">
-            <TextBox Classes="Bordered Large" Watermark="Search contact"
-              Padding="13 0 10 0" Margin="15 0 15 0">
-              <TextBox.InnerRightContent>
-                <TextBlock FontSize="18" FontFamily="{StaticResource Phosphor}"
-                  Text="&#xE30C;" />
-              </TextBox.InnerRightContent>
-            </TextBox>
-            <control:ContactListingControl ItemsSource="{Binding ContactItems}">
-              <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="SelectionChange">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="ContactSelectionChange" />
-                </ia:EventTriggerBehavior>
+      <!-- Container -->
+      <Border Grid.Row="1" Theme="{StaticResource CardBorder}"
+        Padding="0" Background="Transparent" BorderThickness="1"
+        CornerRadius="4">
+        <Grid ColumnDefinitions="*, *, 2*">
+          <!-- Sidebar -->
+          <Border BorderThickness=" 0 0 1 0"
+            BorderBrush="{DynamicResource DividerBorderBrush}">
+            <StackPanel Spacing="15">
+              <!-- New Contact Button -->
+              <Button Margin="15 17 15 0 " Theme="{DynamicResource SolidButton}"
+                Classes="Secondary Large" HorizontalAlignment="Stretch"
+                Content="New Contact" Command="{Binding ShowNewContactDialogCommand}" />
+              <control:SidebarControl ItemsSource="{Binding SidebarItems}"
+                Selected="{Binding SidebarSelected}">
+                <i:Interaction.Behaviors>
+                  <ia:EventTriggerBehavior EventName="SelectionChange">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="SidebarSelectionChange" />
+                  </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+              </control:SidebarControl>
+            </StackPanel>
+          </Border>
 
-                <ia:EventTriggerBehavior EventName="StarClick">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="ContactStarClick" />
-                </ia:EventTriggerBehavior>
+          <!-- Listing -->
+          <Border Grid.Column="1" BorderThickness="0 0 1 0"
+            BorderBrush="{DynamicResource DividerBorderBrush}">
+            <StackPanel Spacing="10" Margin="0 15 0 0">
+              <TextBox Classes="Bordered Large" Watermark="Search contact"
+                Padding="13 0 10 0" Margin="15 0 15 0">
+                <TextBox.InnerRightContent>
+                  <TextBlock FontSize="18"
+                    FontFamily="{StaticResource Phosphor}" Text="&#xE30C;" />
+                </TextBox.InnerRightContent>
+              </TextBox>
+              <control:ContactListingControl
+                ItemsSource="{Binding ContactItems}">
+                <i:Interaction.Behaviors>
+                  <ia:EventTriggerBehavior EventName="SelectionChange">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="ContactSelectionChange" />
+                  </ia:EventTriggerBehavior>
 
-                <ia:EventTriggerBehavior EventName="RemoveClick">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="ContactRemoveClick" />
-                </ia:EventTriggerBehavior>
-              </i:Interaction.Behaviors>
-            </control:ContactListingControl>
+                  <ia:EventTriggerBehavior EventName="StarClick">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="ContactStarClick" />
+                  </ia:EventTriggerBehavior>
+
+                  <ia:EventTriggerBehavior EventName="RemoveClick">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="ContactRemoveClick" />
+                  </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+              </control:ContactListingControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Details -->
+          <StackPanel Grid.Column="2">
+            <ContentControl Content="{Binding DetailsView}" />
           </StackPanel>
-        </Border>
-
-        <!-- Details -->
-        <StackPanel Grid.Column="2">
-          <ContentControl Content="{Binding DetailsView}" />
-        </StackPanel>
-      </Grid>
-    </Border>
-  </Grid>
-</Window>
+        </Grid>
+      </Border>
+    </Grid>
+  </Panel>
+</u:UrsaWindow>
