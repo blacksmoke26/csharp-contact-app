@@ -1,3 +1,10 @@
+// Licensed to the end users under one or more agreements.
+// Copyright (c) 2025 Junaid Atari, and contributors
+// Website: https://github.com/blacksmoke26/
+
+using ContactApp.Wpf.Helpers;
+using Ursa.Controls;
+
 namespace ContactApp.Wpf.Controls;
 
 public partial class ContactDetailViewControl : ContentControl {
@@ -101,5 +108,20 @@ public partial class ContactDetailViewControl : ContentControl {
   [RelayCommand]
   private void RemoveButton(Contact selected) {
     RaiseEvent(new RoutedEventArgs(RemoveClickEvent, selected));
+  }
+
+  // ReSharper disable once AsyncVoidMethod
+  private async void AvatarElement_OnDataContextChanged(object? sender, EventArgs e) {
+    var control = (Avatar)sender!;
+    var contact = control.DataContext as Contact;
+    control.Source = null;
+    control.Content = AvatarHelper.RenderContent(contact?.FirstName, contact?.LastName);
+
+    var result = await AvatarHelper.RenderSource(contact?.FirstName, contact?.LastName, contact?.ProfileImage);
+
+    if (result.Source != null)
+      control.Source = result.Source;
+    else
+      control.Content = result.Content;
   }
 }

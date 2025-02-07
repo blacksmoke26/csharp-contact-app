@@ -16,7 +16,7 @@ public static class FileHelper {
       using HttpClient client = new();
       var downloadStream = await client.GetStreamAsync(url, cancellationToken);
 
-      await using var stream = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write);
+      await using var stream = File.OpenWrite(filename);
       await downloadStream.CopyToAsync(stream, cancellationToken);
 
       return filename;
@@ -24,11 +24,6 @@ public static class FileHelper {
     catch {
       return null;
     }
-  }
-
-  public static string GetTempDir() {
-    var dir = Directory.CreateTempSubdirectory();
-    return Path.Join(Path.GetTempPath(), dir.Name);
   }
 
   /// <summary>
@@ -74,5 +69,19 @@ public static class FileHelper {
     }
 
     return fileName;
+  }
+
+  /// <summary>
+  /// Returns the user-specific temporary directory, create if not exists
+  /// </summary>
+  /// <param name="dirName">directory name</param>
+  /// <param name="joinPath">Additional path to join</param>
+  /// <returns>The absolute path</returns>
+  public static string GetEnsuredTempDir(string dirName, params string[]? joinPath) {
+    var dirPath = Path.Join(Path.GetTempPath(), dirName);
+    if (!Directory.Exists(dirPath))
+      Directory.CreateDirectory(dirPath);
+    
+    return Path.Join([dirPath, ..joinPath ?? []]);
   }
 }

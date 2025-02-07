@@ -1,3 +1,7 @@
+// Licensed to the end users under one or more agreements.
+// Copyright (c) 2025 Junaid Atari, and contributors
+// Website: https://github.com/blacksmoke26/
+
 using ContactApp.Wpf.Helpers;
 using Ursa.Controls;
 
@@ -92,22 +96,18 @@ public partial class ContactListingControl : ContentControl {
   }
 
   // ReSharper disable once AsyncVoidMethod
-  private async void StyledElement_OnInitialized(object? sender, EventArgs e) {
-    var obj = (Avatar)sender!;
-    var contact = (Contact)obj.DataContext!;
-    var avatarContent = string.Concat(contact.FirstName[0], contact.LastName[0]);
+  private async void AvatarElement_OnDataContextChanged(object? sender, EventArgs e) {
+    var control = (Avatar)sender!;
+    var contact = control.DataContext as Contact;
+    control.Source = null;
+    control.Content = AvatarHelper.RenderContent(contact?.FirstName, contact?.LastName);
 
-    if (contact.ProfileImage == null) {
-      obj.Content = avatarContent;
-      return;
-    }
+    var result = await AvatarHelper.RenderSource(contact?.FirstName, contact?.LastName, contact?.ProfileImage);
 
-    var image = await ImageHelper.LoadFromUrlCacheAsync(contact.ProfileImage);
-
-    if (image != null)
-      obj.Source = image;
+    if (result.Source != null)
+      control.Source = result.Source;
     else
-      obj.Content = avatarContent;
+      control.Content = result.Content;
   }
 
   private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e) {
