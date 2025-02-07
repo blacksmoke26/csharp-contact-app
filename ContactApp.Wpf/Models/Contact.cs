@@ -34,8 +34,7 @@ public partial class Contact(string firstName, string lastName, Department depar
       .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber("+############"))
       .RuleFor(c => c.Address, f => f.Address.FullAddress())
       .RuleFor(c => c.Notes, f => f.Lorem.Sentence(35))
-      //.RuleFor(c => c.ProfileImage, f => f.Image.PicsumUrl())
-      .RuleFor(c => c.ProfileImage, f => null)
+      .RuleFor(c => c.ProfileImage, f => f.PickRandom(null, f.Image.LoremFlickrUrl(250, 250)))
       .RuleFor(c => c.IsStarred, f => f.PickRandomParam([true, false]));
 
     return users.Generate(10).ToList();
