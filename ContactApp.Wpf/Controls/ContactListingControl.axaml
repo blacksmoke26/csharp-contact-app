@@ -15,16 +15,15 @@
 
   <ContentControl.Template>
     <ControlTemplate TargetType="{x:Type controls:ContactListingControl}">
-      <ListBox
-        SelectedItem="{TemplateBinding Selected}"
+      <ListBox SelectedItem="{TemplateBinding Selected}"
         ItemsSource="{TemplateBinding ItemsSource}"
         SelectionChanged="SelectingItemsControl_OnSelectionChanged">
         <ListBox.ItemTemplate>
           <DataTemplate DataType="{x:Type mod:Contact}">
             <Grid ColumnDefinitions="Auto, *, Auto" Margin="0 3">
-              <u:Avatar Initialized="StyledElement_OnInitialized"
-                VerticalAlignment="Center"
-                Margin="0 0 15 0" />
+              <u:Avatar DataContextChanged="AvatarElement_OnDataContextChanged"
+                DataContext="{Binding}"
+                VerticalAlignment="Center" Margin="0 0 15 0" />
               <StackPanel Grid.Column="1" VerticalAlignment="Center"
                 Spacing="3">
                 <TextBlock Theme="{DynamicResource TitleTextBlock}"
@@ -41,8 +40,7 @@
                   Classes.StarRating="{Binding !IsStarred}"
                   Classes.StarRatingFill="{Binding IsStarred}"
                   Command="{Binding $parent[controls:ContactListingControl].StarButtonClickCommand}"
-                  CommandParameter="{Binding}"
-                  Content="&#xE46A;" />
+                  CommandParameter="{Binding}" Content="&#xE46A;" />
 
                 <!-- Remove -->
                 <HyperlinkButton Cursor="Hand" FontSize="17" Margin="0 0"
