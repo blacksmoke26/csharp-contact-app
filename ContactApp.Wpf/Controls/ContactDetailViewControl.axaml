@@ -1,0 +1,129 @@
+<ContentControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+  xmlns:controls="clr-namespace:ContactApp.Wpf.Controls"
+  xmlns:u="https://irihi.tech/ursa"
+  xmlns:conv="clr-namespace:ContactApp.Wpf.Convertors"
+  x:Class="ContactApp.Wpf.Controls.ContactDetailViewControl"
+  Content="{Binding}" x:DataType="controls:ContactDetailViewControl">
+
+  <ContentControl.Styles>
+    <StyleInclude Source="/Dicts/Styles.axaml" />
+  </ContentControl.Styles>
+
+  <ContentControl.Resources>
+    <conv:PhoneNumberConvertor x:Key="PhoneNumberConvertor" />
+  </ContentControl.Resources>
+
+  <ContentControl.Template>
+    <ControlTemplate TargetType="{x:Type controls:ContactDetailViewControl}">
+      <StackPanel>
+        <!-- Header -->
+        <Grid ColumnDefinitions="*,*" Margin="20 25 20 0">
+          <Label Theme="{DynamicResource TitleLabel}" Classes="H5"
+            Content="Contact Details" />
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10"
+            VerticalAlignment="Center" HorizontalAlignment="Right">
+            <!-- Pencil -->
+            <HyperlinkButton FontSize="17" Foreground="#B5B5B5"
+              FontWeight="Regular" FontFamily="{StaticResource Phosphor}"
+              Content="&#xE3B4;"
+              Command="{Binding $parent[controls:ContactDetailViewControl].EditButtonCommand}"
+              CommandParameter="{Binding ItemSource}" />
+            <!-- Starred -->
+            <HyperlinkButton FontSize="17" FontWeight="Regular"
+              Classes.StarRating="{Binding !ItemSource.IsStarred, RelativeSource={RelativeSource TemplatedParent}}"
+              Classes.StarRatingFill="{Binding ItemSource.IsStarred, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=False}"
+              Content="&#xE46A;"
+              Command="{Binding $parent[controls:ContactDetailViewControl].StarButtonCommand}"
+              CommandParameter="{Binding ItemSource}" />
+            <!-- Remove -->
+            <HyperlinkButton Cursor="Hand" FontSize="17" Foreground="#B5B5B5"
+              FontWeight="Regular" FontFamily="{StaticResource Phosphor}"
+              Content="&#xE4A6;"
+              Command="{Binding $parent[controls:ContactDetailViewControl].RemoveButtonCommand}"
+              CommandParameter="{Binding ItemSource}" />
+          </StackPanel>
+        </Grid>
+
+        <!-- Separator -->
+        <u:Divider Margin="0 25" />
+
+        <!-- Details -->
+        <StackPanel Spacing="30" Margin="20 0">
+          <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+            <u:Avatar Width="72" Height="72" Margin="0 0 15 0" />
+            <StackPanel Grid.Column="1" Spacing="3" Margin=" 0 5 0 0">
+              <TextBlock Theme="{DynamicResource TitleTextBlock}" Classes="H6">
+                <TextBlock
+                  Text="{Binding ItemSource.FirstName, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                <TextBlock
+                  Text="{Binding ItemSource.LastName, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+              </TextBlock>
+              <TextBlock FontSize="13"
+                Text="{Binding ItemSource.Department.Name, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+              <TextBlock FontSize="13"
+                Text="{Binding ItemSource.Company, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+            </StackPanel>
+          </Grid>
+
+          <Grid ColumnDefinitions="*,*" VerticalAlignment="Center" Margin="5 0">
+            <StackPanel Grid.Column="0" Spacing="3">
+              <TextBlock FontSize="12" Text="Phone Number" />
+              <TextBlock FontWeight="SemiBold"
+                Text="{Binding ItemSource.Phone, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PhoneNumberConvertor}, FallbackValue='-'}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="3">
+              <TextBlock FontSize="12" Text="Email address" />
+              <TextBlock FontWeight="SemiBold"
+                Text="{Binding ItemSource.Email, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+            </StackPanel>
+          </Grid>
+
+          <StackPanel Spacing="3" Margin="5 0">
+            <TextBlock FontSize="12" Text="Address" />
+            <TextBlock FontWeight="SemiBold"
+              Text="{Binding ItemSource.Address, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,*" VerticalAlignment="Center" Margin="5 0">
+            <StackPanel Grid.Column="0" Spacing="3">
+              <TextBlock FontSize="12" Text="Department" />
+              <TextBlock FontWeight="SemiBold"
+                Text="{Binding ItemSource.Department.Name, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="3">
+              <TextBlock FontSize="12" Text="Company" />
+              <TextBlock FontWeight="SemiBold"
+                Text="{Binding ItemSource.Company, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+            </StackPanel>
+          </Grid>
+
+          <StackPanel Spacing="3" Margin="5 0">
+            <TextBlock FontSize="12" Text="Notes" />
+            <TextBlock TextWrapping="Wrap" LineHeight="23"
+              Text="{Binding ItemSource.Notes, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+          </StackPanel>
+
+        </StackPanel>
+
+        <!-- Separator -->
+        <u:Divider Margin="0 30 0 20" />
+
+        <!-- Footer -->
+        <StackPanel Spacing="10" Orientation="Horizontal" Margin="25 0">
+          <Button Theme="{DynamicResource SolidButton}" Content="Edit"
+            Width="75"
+            Command="{Binding $parent[controls:ContactDetailViewControl].EditButtonCommand}"
+            CommandParameter="{Binding ItemSource}" />
+          <Button Theme="{DynamicResource SolidButton}" Classes="Danger"
+            Content="Delete"
+            Command="{Binding $parent[controls:ContactDetailViewControl].RemoveButtonCommand}"
+            CommandParameter="{Binding ItemSource}" />
+        </StackPanel>
+      </StackPanel>
+    </ControlTemplate>
+  </ContentControl.Template>
+</ContentControl>

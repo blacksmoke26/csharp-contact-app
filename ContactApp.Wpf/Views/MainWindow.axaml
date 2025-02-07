@@ -5,6 +5,7 @@
   xmlns:u="https://irihi.tech/ursa"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:control="clr-namespace:ContactApp.Wpf.Controls"
+  xmlns:v="clr-namespace:ContactApp.Wpf.Views"
   xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
   xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="900" Width="1250"
@@ -15,15 +16,14 @@
   ExtendClientAreaChromeHints="NoChrome" CanResize="True"
   ExtendClientAreaTitleBarHeightHint="-1"
   ExtendClientAreaToDecorationsHint="True" SystemDecorations="None"
-  TitleBarContent="" Icon="/Assets/avalonia-logo.ico"
-  BorderThickness="1" BorderBrush="#101010"
-  IsManagedResizerVisible="True"
+  TitleBarContent="" Icon="/Assets/avalonia-logo.ico" BorderThickness="1"
+  BorderBrush="#101010" IsManagedResizerVisible="True"
   TitleBarMargin="15 5 15 0">
 
   <u:UrsaWindow.LeftContent>
-    <TextBlock Text="Contacts Manager" Padding="0 7 0 0"/>
+    <TextBlock Text="Contacts Manager" Padding="0 7 0 0" />
   </u:UrsaWindow.LeftContent>
-  
+
   <Design.DataContext>
     <vm:MainWindowViewModel />
   </Design.DataContext>
@@ -57,18 +57,18 @@
       </Border>
 
       <!-- Container -->
-      <Border Grid.Row="1" Theme="{StaticResource CardBorder}"
-        Padding="0" Background="Transparent" BorderThickness="1"
-        CornerRadius="4">
+      <Border Grid.Row="1" Theme="{StaticResource CardBorder}" Padding="0"
+        Background="Transparent" BorderThickness="1" CornerRadius="4">
         <Grid ColumnDefinitions="*, *, 2*">
           <!-- Sidebar -->
           <Border BorderThickness=" 0 0 1 0"
             BorderBrush="{DynamicResource DividerBorderBrush}">
             <StackPanel Spacing="15">
               <!-- New Contact Button -->
-              <Button Margin="15 17 15 0 " Theme="{DynamicResource SolidButton}"
-                Classes="Secondary Large" HorizontalAlignment="Stretch"
-                Content="New Contact" Command="{Binding ShowNewContactDialogCommand}" />
+              <Button Margin="15 17 15 0 "
+                Theme="{DynamicResource SolidButton}" Classes="Secondary Large"
+                HorizontalAlignment="Stretch" Content="New Contact"
+                Command="{Binding ShowNewContactDialogCommand}" />
               <control:SidebarControl ItemsSource="{Binding SidebarItems}"
                 Selected="{Binding SidebarSelected}">
                 <i:Interaction.Behaviors>
@@ -116,7 +116,27 @@
 
           <!-- Details -->
           <StackPanel Grid.Column="2">
-            <ContentControl Content="{Binding DetailsView}" />
+            <control:ContactDetailViewControl
+              ItemSource="{Binding ContactSelected}"
+              IsVisible="{Binding IsContactSelected, FallbackValue=False}">
+              <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="EditClick">
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="ContactEditClick" />
+                </ia:EventTriggerBehavior>
+
+                <ia:EventTriggerBehavior EventName="StarClick">
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="ContactStarClick" />
+                </ia:EventTriggerBehavior>
+
+                <ia:EventTriggerBehavior EventName="RemoveClick">
+                  <ia:CallMethodAction TargetObject="{Binding}"
+                    MethodName="ContactRemoveClick" />
+                </ia:EventTriggerBehavior>
+              </i:Interaction.Behaviors>
+            </control:ContactDetailViewControl>
+            <v:NoContactView IsVisible="{Binding !IsContactSelected}" />
           </StackPanel>
         </Grid>
       </Border>

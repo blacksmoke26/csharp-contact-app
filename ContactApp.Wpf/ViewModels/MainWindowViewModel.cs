@@ -12,29 +12,19 @@ namespace ContactApp.Wpf.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase {
   [ObservableProperty] private string? _sidebarSelected = "all";
-  [ObservableProperty] private Contact? _contactSelected;
+
+  [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsContactSelected))]
+  private Contact? _contactSelected;
+
   [ObservableProperty] private ObservableCollection<Contact> _contactItems = [];
   [ObservableProperty] private ObservableCollection<SidebarItem> _sidebarItems = [];
 
-  [ObservableProperty] private Control? _detailsView;
-
-  public MainWindowViewModel() {
-    DetailsView = Ioc.Default.GetRequiredService<ViewLocator>().CreateView<NoContactViewModel>();
-    _ = InitializeSidebarItems();
+  public bool IsContactSelected {
+    get => ContactSelected != null;
   }
 
-  partial void OnContactSelectedChanged(Contact? value) {
-    var viewLocator = Ioc.Default.GetRequiredService<ViewLocator>();
-
-    // No contact selected, sets the placeholder view
-    if (value == null) {
-      DetailsView = viewLocator.CreateView<NoContactViewModel>();
-      return;
-    }
-
-    // Contact details
-    DetailsView = viewLocator.CreateView<ContactDetailsViewModel>
-      (vm => vm.Contact = value);
+  public MainWindowViewModel() {
+    _ = InitializeSidebarItems();
   }
 
   /// <summary>
@@ -81,23 +71,58 @@ public partial class MainWindowViewModel : ViewModelBase {
   /// Event: Triggered when contact selection is changed
   /// </summary>
   public void ContactSelectionChange(object? _, RoutedEventArgs e) {
-    ContactSelected = (e.Source as ContactListingControl)?.Selected;
+    ContactSelected = GetContactFromEventArgs(e);
+  }
+
+  /// <summary>
+  /// Event: Triggered when contact edit button is clicked
+  /// </summary>
+  public void ContactEditClick(object? _, RoutedEventArgs e) {
+    ContactSelected = GetContactFromEventArgs(e);
+    Console.WriteLine("Contact edit button clicked");
   }
 
   /// <summary>
   /// Event: Triggered when contact star button is clicked
   /// </summary>
   public void ContactStarClick(object? _, RoutedEventArgs e) {
-    ContactSelected = (e.Source as ContactListingControl)?.Selected;
+    ContactSelected = GetContactFromEventArgs(e);
     if (ContactSelected != null) {
       ContactSelected.IsStarred = !ContactSelected.IsStarred;
     }
+    Console.WriteLine("Contact start button clicked");
   }
 
   /// <summary>
   /// Event: Triggered when contact remove button is clicked
   /// </summary>
-  public void ContactRemoveClick(object? _, RoutedEventArgs e) {
-    ContactSelected = (e.Source as ContactListingControl)?.Selected;
+  public async Task ContactRemoveClick(object? _, RoutedEventArgs e) {
+    ContactSelected = GetContactFromEventArgs(e);
+    
+    var result = await OverlayDialog.ShowModal(new TextBlock {
+      Text = "Do you really want to delete this contact?",
+      Margin = new Thickness(0, 5, 0, 10)
+    }, null, null, new OverlayDialogOptions {
+      Buttons = DialogButton.YesNo,
+      Title = "Delete Contact",
+      Mode = DialogMode.Warning
+    });
+
+    if (result == DialogResult.No) return;
+
+    //TODO: Implement contact deletion logic here
+  }
+
+  /// <summary>
+  /// Get contact object from routed event arguments
+  /// </summary>
+  /// <param name="e">Routed Event args</param>
+  /// <returns>Whatever the contact instance or null </returns>
+  private Contact? GetContactFromEventArgs(RoutedEventArgs e) {
+    return e.Source switch {
+      ContactListingControl control => control.Selected,
+      ContactDetailViewControl model => model.ItemSource,
+      _ => null
+    };
   }
 }
