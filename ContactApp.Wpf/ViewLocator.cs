@@ -15,8 +15,6 @@ public class ViewLocator : IDataTemplate {
   public ViewLocator() {
     RegisterViewFactory<MainWindowViewModel, MainWindow>();
     RegisterViewFactory<ContactFormViewModel, ContactFormView>();
-    RegisterViewFactory<ContactDetailsViewModel, ContactDetailsView>();
-    RegisterViewFactory<NoContactViewModel, NoContactView>();
   }
 
   /// <summary>
@@ -61,6 +59,19 @@ public class ViewLocator : IDataTemplate {
     fn?.Invoke(viewModel);
     var control = Build(viewModel);
     control.DataContext = viewModel;
+    return control;
+  }
+
+  /// <summary>
+  /// Creates view instances based on the given view-model instance
+  /// </summary>
+  /// <param name="vm">The viewmodel instance</param>
+  /// <typeparam name="TViewModel">ViewModel class</typeparam>
+  /// <returns>The created view instance</returns>
+  public Control CreateView<TViewModel>(TViewModel vm)
+    where TViewModel : class {
+    var control = Build(vm);
+    control.DataContext = vm;
     return control;
   }
 }
