@@ -3,22 +3,15 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="800"
-  xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels"
-  x:Class="ContactApp.Wpf.Views.NoContactView"
-  x:DataType="vm:NoContactViewModel">
-  
-  <Design.DataContext>
-    <vm:NoContactViewModel />
-  </Design.DataContext>
-
-  <Grid RowDefinitions="150, *" HorizontalAlignment="Center" VerticalAlignment="Top">
+  x:Class="ContactApp.Wpf.Views.NoContactView">
+  <Grid RowDefinitions="150, *" HorizontalAlignment="Center"
+    VerticalAlignment="Top">
     <StackPanel Grid.Row="1">
-      <Label Theme="{DynamicResource TitleLabel}"
-        FontWeight="Normal"
+      <Label Theme="{DynamicResource TitleLabel}" FontWeight="Normal"
         Classes="H4">
         Please Select a Contact
       </Label>
-      <Image Source="/Assets/Images/emailSv.webp" Height="250"/>
+      <Image Source="/Assets/Images/emailSv.webp" Height="250" />
     </StackPanel>
   </Grid>
 </UserControl>
