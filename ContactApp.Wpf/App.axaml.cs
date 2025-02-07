@@ -75,8 +75,6 @@ public class App : Application {
     services.AddSingleton<ViewLocator>();
     services.AddSingleton<MainWindowViewModel>();
     services.AddTransient<ContactFormViewModel>();
-    services.AddSingleton<ContactDetailsViewModel>();
-    services.AddSingleton<NoContactViewModel>();
 
     #endregion
 
