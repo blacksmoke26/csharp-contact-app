@@ -59,7 +59,7 @@
       <!-- Container -->
       <Border Grid.Row="1" Theme="{StaticResource CardBorder}" Padding="0"
         Background="Transparent" BorderThickness="1" CornerRadius="4">
-        <Grid ColumnDefinitions="*, *, 2*">
+        <Grid ColumnDefinitions="0.7*, *, 2*">
           <!-- Sidebar -->
           <Border BorderThickness=" 0 0 1 0"
             BorderBrush="{DynamicResource DividerBorderBrush}">
@@ -95,9 +95,10 @@
               </TextBox>
               <ScrollViewer x:Name="ListingScrollViewer"
                 VerticalScrollBarVisibility="Auto"
-                Height="{Binding Path=Height,RelativeSource={RelativeSource AncestorType=Border}}"
+                Height="{Binding Path=Height, RelativeSource={RelativeSource AncestorType=Border}}"
                 AllowAutoHide="True">
                 <control:ContactListingControl
+                  Selected="{Binding ContactSelected}"
                   ItemsSource="{Binding ContactItems}">
                   <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="SelectionChange">
