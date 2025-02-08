@@ -3,6 +3,7 @@
 // Website: https://github.com/blacksmoke26/
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using ContactApp.Wpf.Interfaces;
 using Irihi.Avalonia.Shared.Contracts;
 
@@ -71,7 +72,7 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
       Department!
     ) {
       Company = Company,
-      Phone = Phone,
+      Phone = string.IsNullOrWhiteSpace(Phone) ? null : Regex.Replace(Phone, @"/[^\+\d]+/", string.Empty),
       Email = Email,
       Notes = Notes,
       Address = Address,
