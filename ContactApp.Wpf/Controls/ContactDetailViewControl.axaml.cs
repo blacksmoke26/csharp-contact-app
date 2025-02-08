@@ -91,7 +91,8 @@ public partial class ContactDetailViewControl : ContentControl {
   /// </summary>
   [RelayCommand]
   private void EditButton(Contact selected) {
-    RaiseEvent(new RoutedEventArgs(EditClickEvent, selected));
+    ItemSource = selected;
+    RaiseEvent(new RoutedEventArgs(EditClickEvent));
   }
 
   /// <summary>
@@ -99,7 +100,8 @@ public partial class ContactDetailViewControl : ContentControl {
   /// </summary>
   [RelayCommand]
   private void StarButton(Contact selected) {
-    RaiseEvent(new RoutedEventArgs(StarClickEvent, selected));
+    ItemSource = selected;
+    RaiseEvent(new RoutedEventArgs(StarClickEvent));
   }
 
   /// <summary>
@@ -110,6 +112,9 @@ public partial class ContactDetailViewControl : ContentControl {
     RaiseEvent(new RoutedEventArgs(RemoveClickEvent, selected));
   }
 
+  /// <summary>
+  /// Event: Triggered when avatar control data-context is updated
+  /// </summary>
   // ReSharper disable once AsyncVoidMethod
   private async void AvatarElement_OnDataContextChanged(object? sender, EventArgs e) {
     var control = (Avatar)sender!;

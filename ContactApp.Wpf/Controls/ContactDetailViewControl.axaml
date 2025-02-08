@@ -15,6 +15,8 @@
 
   <ContentControl.Resources>
     <conv:PhoneNumberConvertor x:Key="PhoneNumberConvertor" />
+    <conv:NullableStringPlaceholderConvertor
+      x:Key="NullableStringPlaceholderConvertor" />
   </ContentControl.Resources>
 
   <ContentControl.Template>
@@ -60,14 +62,22 @@
             <StackPanel Grid.Column="1" Spacing="3" Margin=" 0 5 0 0">
               <TextBlock Theme="{DynamicResource TitleTextBlock}" Classes="H6">
                 <TextBlock
-                  Text="{Binding ItemSource.FirstName, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                  Text="{Binding ItemSource.FirstName,
+                  RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                  Converter={StaticResource NullableStringPlaceholderConvertor}}" />
                 <TextBlock
-                  Text="{Binding ItemSource.LastName, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                  Text="{Binding ItemSource.LastName,
+                  RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                  Converter={StaticResource NullableStringPlaceholderConvertor}}" />
               </TextBlock>
               <TextBlock FontSize="13"
-                Text="{Binding ItemSource.Department.Name, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                Text="{Binding ItemSource.Department.Name,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
               <TextBlock FontSize="13"
-                Text="{Binding ItemSource.Company, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                Text="{Binding ItemSource.Company,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
             </StackPanel>
           </Grid>
 
@@ -80,33 +90,43 @@
             <StackPanel Grid.Column="1" Spacing="3">
               <TextBlock FontSize="12" Text="Email address" />
               <TextBlock FontWeight="SemiBold"
-                Text="{Binding ItemSource.Email, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                Text="{Binding ItemSource.Email,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
             </StackPanel>
           </Grid>
 
           <StackPanel Spacing="3" Margin="5 0">
             <TextBlock FontSize="12" Text="Address" />
             <TextBlock FontWeight="SemiBold"
-              Text="{Binding ItemSource.Address, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+              Text="{Binding ItemSource.Address,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
           </StackPanel>
 
           <Grid ColumnDefinitions="*,*" VerticalAlignment="Center" Margin="5 0">
             <StackPanel Grid.Column="0" Spacing="3">
               <TextBlock FontSize="12" Text="Department" />
               <TextBlock FontWeight="SemiBold"
-                Text="{Binding ItemSource.Department.Name, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                Text="{Binding ItemSource.Department.Name,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
             </StackPanel>
             <StackPanel Grid.Column="1" Spacing="3">
               <TextBlock FontSize="12" Text="Company" />
               <TextBlock FontWeight="SemiBold"
-                Text="{Binding ItemSource.Company, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+                Text="{Binding ItemSource.Company,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
             </StackPanel>
           </Grid>
 
           <StackPanel Spacing="3" Margin="5 0">
             <TextBlock FontSize="12" Text="Notes" />
             <TextBlock TextWrapping="Wrap" LineHeight="23"
-              Text="{Binding ItemSource.Notes, RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-'}" />
+              Text="{Binding ItemSource.Notes,
+                RelativeSource={RelativeSource TemplatedParent}, FallbackValue='-', 
+                Converter={StaticResource NullableStringPlaceholderConvertor}}" />
           </StackPanel>
 
         </StackPanel>

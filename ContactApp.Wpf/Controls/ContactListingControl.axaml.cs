@@ -78,6 +78,9 @@ public partial class ContactListingControl : ContentControl {
     _ = InitializeDesignMode();
   }
 
+  /// <summary>
+  /// Method to initialize the component state in design mode only.
+  /// </summary>
   private async Task InitializeDesignMode() {
     if (Design.IsDesignMode) {
       var contacts = await Contact.FetchPredefinedAsync();
@@ -85,16 +88,27 @@ public partial class ContactListingControl : ContentControl {
     }
   }
 
+  /// <summary>
+  /// Event: Triggered when star button is clicked
+  /// </summary>
   [RelayCommand]
   private void StarButtonClick(Contact contact) {
-    RaiseEvent(new RoutedEventArgs(StarClickEvent, contact));
+    Selected = contact;
+    RaiseEvent(new RoutedEventArgs(StarClickEvent));
   }
 
+  /// <summary>
+  /// Event: Triggered when remove button is clicked
+  /// </summary>
   [RelayCommand]
   private void RemoveButtonClick(Contact contact) {
-    RaiseEvent(new RoutedEventArgs(RemoveClickEvent, contact));
+    Selected = contact;
+    RaiseEvent(new RoutedEventArgs(RemoveClickEvent));
   }
 
+  /// <summary>
+  /// Event: Triggered when avatar control data-context is updated
+  /// </summary>
   // ReSharper disable once AsyncVoidMethod
   private async void AvatarElement_OnDataContextChanged(object? sender, EventArgs e) {
     var control = (Avatar)sender!;

@@ -5,7 +5,6 @@
 using ContactApp.Wpf.Controls;
 using ContactApp.Wpf.ViewModels.Forms;
 using ContactApp.Wpf.Views.Forms;
-using Dumpify;
 using Ursa.Controls;
 
 namespace ContactApp.Wpf.ViewModels;
@@ -56,7 +55,8 @@ public partial class MainWindowViewModel : ViewModelBase {
     );
 
     if (instance.IsFormSubmitted()) {
-      instance.GetFormData().Dump();
+      ContactItems.Add(instance.GetFormData()!);
+      ContactSelected = ContactItems.LastOrDefault();
     }
   }
 
@@ -98,19 +98,27 @@ public partial class MainWindowViewModel : ViewModelBase {
   /// </summary>
   public async Task ContactRemoveClick(object? _, RoutedEventArgs e) {
     ContactSelected = GetContactFromEventArgs(e);
-    
+
     var result = await OverlayDialog.ShowModal(new TextBlock {
-      Text = "Do you really want to delete this contact?",
+      Text = "Do you really want to remove this contact?",
       Margin = new Thickness(0, 5, 0, 10)
     }, null, null, new OverlayDialogOptions {
       Buttons = DialogButton.YesNo,
-      Title = "Delete Contact",
+      Title = "Remove Contact",
       Mode = DialogMode.Warning
     });
 
-    if (result == DialogResult.No) return;
+    if (result == DialogResult.Yes) {
+      var index = ContactItems.IndexOf(ContactSelected!);
+      ContactItems.Remove(ContactSelected!);
 
-    //TODO: Implement contact deletion logic here
+      ContactSelected = index switch {
+        -1 => ContactItems.FirstOrDefault(),
+        0 => ContactItems.FirstOrDefault(),
+        > 0 => ContactItems[index - 1],
+        _ => null,
+      };
+    }
   }
 
   /// <summary>

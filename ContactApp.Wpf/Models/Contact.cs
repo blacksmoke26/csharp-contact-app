@@ -8,7 +8,7 @@ public partial class Contact(string firstName, string lastName, Department depar
   [ObservableProperty] private string _firstName = firstName;
   [ObservableProperty] private string _lastName = lastName;
   [ObservableProperty] private Department _department = department;
-  
+
   [ObservableProperty] private string? _company;
   [ObservableProperty] private string? _phone;
   [ObservableProperty] private string? _email;
@@ -17,12 +17,16 @@ public partial class Contact(string firstName, string lastName, Department depar
   [ObservableProperty] private string? _profileImage;
 
   [ObservableProperty] private bool _isStarred;
+  
+  [ObservableProperty] private DateTime _createdAt = DateTime.Now;
+  [ObservableProperty] private DateTime _updatedAt = DateTime.Now;
 
   /// <summary>
   /// Return the predefined departments 
   /// </summary>
+  /// <param name="count">The number of records to fetch</param>
   /// <returns>The department list</returns>
-  public static async Task<List<Contact>> FetchPredefinedAsync() {
+  public static async Task<List<Contact>> FetchPredefinedAsync(int count = 20) {
     var contactId = 1;
 
     var departments = await Department.FetchPredefinedAsync();
@@ -37,6 +41,6 @@ public partial class Contact(string firstName, string lastName, Department depar
       .RuleFor(c => c.ProfileImage, f => f.PickRandom(null, f.Image.LoremFlickrUrl(250, 250)))
       .RuleFor(c => c.IsStarred, f => f.PickRandomParam([true, false]));
 
-    return users.Generate(10).ToList();
+    return users.Generate(count).ToList();
   }
 }
