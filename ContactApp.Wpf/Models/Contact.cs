@@ -21,8 +21,9 @@ public partial class Contact(string firstName, string lastName, Department depar
   /// <summary>
   /// Return the predefined departments 
   /// </summary>
+  /// <param name="count">The number of records to fetch</param>
   /// <returns>The department list</returns>
-  public static async Task<List<Contact>> FetchPredefinedAsync() {
+  public static async Task<List<Contact>> FetchPredefinedAsync(int count = 20) {
     var contactId = 1;
 
     var departments = await Department.FetchPredefinedAsync();
@@ -37,6 +38,6 @@ public partial class Contact(string firstName, string lastName, Department depar
       .RuleFor(c => c.ProfileImage, f => f.PickRandom(null, f.Image.LoremFlickrUrl(250, 250)))
       .RuleFor(c => c.IsStarred, f => f.PickRandomParam([true, false]));
 
-    return users.Generate(10).ToList();
+    return users.Generate(count).ToList();
   }
 }
