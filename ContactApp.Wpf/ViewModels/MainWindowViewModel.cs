@@ -2,7 +2,9 @@
 // Copyright (c) 2025 Junaid Atari, and contributors
 // Website: https://github.com/blacksmoke26/
 
+using System.ComponentModel;
 using ContactApp.Wpf.Controls;
+using ContactApp.Wpf.Filters;
 using ContactApp.Wpf.ViewModels.Forms;
 using ContactApp.Wpf.Views.Forms;
 using Ursa.Controls;
@@ -10,26 +12,32 @@ using Ursa.Controls;
 namespace ContactApp.Wpf.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase {
-  [ObservableProperty] private string? _sidebarSelected = "all";
+  [ObservableProperty] private string _sidebarSelected = SidebarItem.ItemIdAll;
+
+  [ObservableProperty] private string _searchQuery = string.Empty;
 
   [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsContactSelected))]
   private Contact? _contactSelected;
 
+  private readonly string[] _filterProps = [nameof(SidebarSelected), nameof(SearchQuery)];
+
+  private readonly ContactsFilter _recordsFilter = new() {
+    CategoryId = SidebarItem.ItemIdAll,
+  };
+
   [ObservableProperty] private ObservableCollection<Contact> _contactItems = [];
   [ObservableProperty] private ObservableCollection<SidebarItem> _sidebarItems = [];
 
-  public bool IsContactSelected {
-    get => ContactSelected != null;
-  }
+  public bool IsContactSelected => ContactSelected != null;
 
   public MainWindowViewModel() {
-    _ = InitializeSidebarItems();
+    _ = InitializeData();
   }
 
   /// <summary>
-  /// Prepare sidebar
+  /// Prepare data for controls 
   /// </summary>
-  private async Task InitializeSidebarItems() {
+  private async Task InitializeData() {
     var sidebarItems = await SidebarItem.FetchPredefinedAsync();
 
     var departments = await Department.FetchPredefinedAsync();
@@ -39,8 +47,34 @@ public partial class MainWindowViewModel : ViewModelBase {
 
     // fetch contacts and add them to existing list
     var contacts = await Contact.FetchPredefinedAsync();
-    contacts.ForEach(ContactItems.Add);
+    _recordsFilter.Items.AddRange(contacts);
+
+    await ApplyFiltersCommand.ExecuteAsync(null);
   }
+
+  #region Records filteration process
+
+  [RelayCommand]
+  private async Task ApplyFilters() {
+    _recordsFilter.CategoryId = SidebarSelected;
+    _recordsFilter.Query = SearchQuery;
+
+    var records = await _recordsFilter.FetchFiltered() as List<Contact>;
+
+    ContactItems.Clear();
+
+    records?.ForEach(ContactItems.Add);
+    ContactSelected = ContactItems.First();
+  }
+
+  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
+    base.OnPropertyChanged(e);
+    // trigger filters changes
+    if (_filterProps.Contains(e.PropertyName))
+      ApplyFiltersCommand.ExecuteAsync(null);
+  }
+
+  #endregion
 
   [RelayCommand]
   private async Task ShowNewContactDialog() {
@@ -57,6 +91,7 @@ public partial class MainWindowViewModel : ViewModelBase {
     if (instance.IsFormSubmitted()) {
       ContactItems.Add(instance.GetFormData()!);
       ContactSelected = ContactItems.LastOrDefault();
+      _recordsFilter.Items.Add(instance.GetFormData()!);
     }
   }
 
@@ -64,7 +99,7 @@ public partial class MainWindowViewModel : ViewModelBase {
   /// Event: Triggered when sidebar item is clicked
   /// </summary>
   public void SidebarSelectionChange(object? _, RoutedEventArgs e) {
-    SidebarSelected = (e.Source as SidebarControl)?.Selected;
+    SidebarSelected = (e.Source as SidebarControl)?.Selected!;
   }
 
   /// <summary>
@@ -90,6 +125,7 @@ public partial class MainWindowViewModel : ViewModelBase {
     if (ContactSelected != null) {
       ContactSelected.IsStarred = !ContactSelected.IsStarred;
     }
+
     Console.WriteLine("Contact start button clicked");
   }
 

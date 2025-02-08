@@ -33,6 +33,8 @@ public partial class Contact(string firstName, string lastName, Department depar
     var users = new Faker<Contact>()
       .CustomInstantiator(f => new Contact(f.Name.FirstName(), f.Name.LastName(), f.PickRandom(departments)))
       .RuleFor(c => c.Id, () => contactId++)
+      .RuleFor(c => c.CreatedAt, f => f.Date.Past())
+      .RuleFor(c => c.UpdatedAt, f => f.Date.Soon())
       .RuleFor(c => c.Company, f => f.Company.CompanyName())
       .RuleFor(c => c.Email, f => f.Internet.Email())
       .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber("+############"))
