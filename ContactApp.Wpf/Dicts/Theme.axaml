@@ -6,7 +6,8 @@
       <SolidColorBrush x:Key="PrimaryBackground" Color="#FEFEFE" />
       <SolidColorBrush x:Key="DialogPrimaryBackground" Color="#FEFEFE" />
       <SolidColorBrush x:Key="DialogOverlayBackground" Color="#FFFFFF" />
-      <SolidColorBrush x:Key="RatingForeground" Color="#B5B5B5" />
+      <SolidColorBrush x:Key="RatingForeground" Color="#2B2D30" />
+      <SolidColorBrush x:Key="TextIconForeground" Color="#2B2D30" />
       <SolidColorBrush x:Key="RatingForegroundFill" Color="#FDDE43" />
     </ResourceDictionary>
     <ResourceDictionary x:Key="Dark">
@@ -14,7 +15,8 @@
       <SolidColorBrush x:Key="PrimaryBackground" Color="#2B2B2B" />
       <SolidColorBrush x:Key="DialogPrimaryBackground" Color="#2B2D30" />
       <SolidColorBrush x:Key="DialogOverlayBackground" Color="#0C0D0E" />
-      <SolidColorBrush x:Key="RatingForeground" Color="#2B2D30" />
+      <SolidColorBrush x:Key="RatingForeground" Color="#B5B5B5" />
+      <SolidColorBrush x:Key="TextIconForeground" Color="#B5B5B5" />
       <SolidColorBrush x:Key="RatingForegroundFill" Color="#FAC800" />
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
