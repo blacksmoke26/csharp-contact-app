@@ -125,8 +125,6 @@ public partial class MainWindowViewModel : ViewModelBase {
     if (ContactSelected != null) {
       ContactSelected.IsStarred = !ContactSelected.IsStarred;
     }
-
-    Console.WriteLine("Contact start button clicked");
   }
 
   /// <summary>
