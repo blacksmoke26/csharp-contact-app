@@ -8,7 +8,7 @@ public partial class Contact(string firstName, string lastName, Department depar
   [ObservableProperty] private string _firstName = firstName;
   [ObservableProperty] private string _lastName = lastName;
   [ObservableProperty] private Department _department = department;
-  
+
   [ObservableProperty] private string? _company;
   [ObservableProperty] private string? _phone;
   [ObservableProperty] private string? _email;
@@ -17,6 +17,9 @@ public partial class Contact(string firstName, string lastName, Department depar
   [ObservableProperty] private string? _profileImage;
 
   [ObservableProperty] private bool _isStarred;
+  
+  [ObservableProperty] private DateTime _createdAt = DateTime.Now;
+  [ObservableProperty] private DateTime _updatedAt = DateTime.Now;
 
   /// <summary>
   /// Return the predefined departments 
