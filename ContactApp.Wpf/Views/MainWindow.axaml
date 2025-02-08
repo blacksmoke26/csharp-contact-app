@@ -8,7 +8,7 @@
   xmlns:v="clr-namespace:ContactApp.Wpf.Views"
   xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
   xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="900" Width="1250"
+  mc:Ignorable="d" d:DesignWidth="1250" d:DesignHeight="900" Width="1250"
   MinWidth="1000" MinHeight="950" x:CompileBindings="True"
   WindowStartupLocation="CenterScreen"
   x:Class="ContactApp.Wpf.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
@@ -83,6 +83,7 @@
 
           <!-- Listing -->
           <Border Grid.Column="1" BorderThickness="0 0 1 0"
+            VerticalAlignment="Top"
             BorderBrush="{DynamicResource DividerBorderBrush}">
             <StackPanel Spacing="10" Margin="0 15 0 0">
               <TextBox Classes="Bordered Large" Watermark="Search contact"
@@ -92,25 +93,30 @@
                     FontFamily="{StaticResource Phosphor}" Text="&#xE30C;" />
                 </TextBox.InnerRightContent>
               </TextBox>
-              <control:ContactListingControl
-                ItemsSource="{Binding ContactItems}">
-                <i:Interaction.Behaviors>
-                  <ia:EventTriggerBehavior EventName="SelectionChange">
-                    <ia:CallMethodAction TargetObject="{Binding}"
-                      MethodName="ContactSelectionChange" />
-                  </ia:EventTriggerBehavior>
+              <ScrollViewer x:Name="ListingScrollViewer"
+                VerticalScrollBarVisibility="Auto"
+                Height="{Binding Path=Height,RelativeSource={RelativeSource AncestorType=Border}}"
+                AllowAutoHide="True">
+                <control:ContactListingControl
+                  ItemsSource="{Binding ContactItems}">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="SelectionChange">
+                      <ia:CallMethodAction TargetObject="{Binding}"
+                        MethodName="ContactSelectionChange" />
+                    </ia:EventTriggerBehavior>
 
-                  <ia:EventTriggerBehavior EventName="StarClick">
-                    <ia:CallMethodAction TargetObject="{Binding}"
-                      MethodName="ContactStarClick" />
-                  </ia:EventTriggerBehavior>
+                    <ia:EventTriggerBehavior EventName="StarClick">
+                      <ia:CallMethodAction TargetObject="{Binding}"
+                        MethodName="ContactStarClick" />
+                    </ia:EventTriggerBehavior>
 
-                  <ia:EventTriggerBehavior EventName="RemoveClick">
-                    <ia:CallMethodAction TargetObject="{Binding}"
-                      MethodName="ContactRemoveClick" />
-                  </ia:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-              </control:ContactListingControl>
+                    <ia:EventTriggerBehavior EventName="RemoveClick">
+                      <ia:CallMethodAction TargetObject="{Binding}"
+                        MethodName="ContactRemoveClick" />
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                </control:ContactListingControl>
+              </ScrollViewer>
             </StackPanel>
           </Border>
 
