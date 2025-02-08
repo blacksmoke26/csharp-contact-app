@@ -86,65 +86,81 @@
             VerticalAlignment="Top"
             BorderBrush="{DynamicResource DividerBorderBrush}">
             <StackPanel Spacing="10" Margin="0 15 0 0">
-              <TextBox Classes="Bordered Large" Watermark="Search contact"
-                Padding="13 0 10 0" Margin="15 0 15 0">
+              <TextBox Loaded="SearchTextBox_OnLoaded"
+                Classes="SearchTextBox Bordered Large"
+                Watermark="Search contact" Text="{Binding SearchQuery}"
+                Padding="13 0 10 0" Margin="15 1 15 0">
                 <TextBox.InnerRightContent>
                   <TextBlock FontSize="18"
                     FontFamily="{StaticResource Phosphor}" Text="&#xE30C;" />
                 </TextBox.InnerRightContent>
               </TextBox>
-              <ScrollViewer x:Name="ListingScrollViewer"
-                VerticalScrollBarVisibility="Auto"
-                Height="{Binding Path=Height, RelativeSource={RelativeSource AncestorType=Border}}"
-                AllowAutoHide="True">
-                <control:ContactListingControl
-                  Selected="{Binding ContactSelected}"
-                  ItemsSource="{Binding ContactItems}">
-                  <i:Interaction.Behaviors>
-                    <ia:EventTriggerBehavior EventName="SelectionChange">
-                      <ia:CallMethodAction TargetObject="{Binding}"
-                        MethodName="ContactSelectionChange" />
-                    </ia:EventTriggerBehavior>
+              <u:LoadingContainer
+                IsLoading="{Binding ApplyFiltersCommand.IsRunning}"
+                HorizontalAlignment="Stretch" LoadingMessage="loading..."
+                VerticalContentAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch">
+                <ScrollViewer x:Name="ListingScrollViewer"
+                  VerticalScrollBarVisibility="Auto"
+                  Height="{Binding Path=Height, RelativeSource={RelativeSource AncestorType=Border}}"
+                  AllowAutoHide="True">
+                  <control:ContactListingControl
+                    Selected="{Binding ContactSelected}"
+                    ItemsSource="{Binding ContactItems}">
+                    <i:Interaction.Behaviors>
+                      <ia:EventTriggerBehavior EventName="SelectionChange">
+                        <ia:CallMethodAction TargetObject="{Binding}"
+                          MethodName="ContactSelectionChange" />
+                      </ia:EventTriggerBehavior>
 
-                    <ia:EventTriggerBehavior EventName="StarClick">
-                      <ia:CallMethodAction TargetObject="{Binding}"
-                        MethodName="ContactStarClick" />
-                    </ia:EventTriggerBehavior>
+                      <ia:EventTriggerBehavior EventName="StarClick">
+                        <ia:CallMethodAction TargetObject="{Binding}"
+                          MethodName="ContactStarClick" />
+                      </ia:EventTriggerBehavior>
 
-                    <ia:EventTriggerBehavior EventName="RemoveClick">
-                      <ia:CallMethodAction TargetObject="{Binding}"
-                        MethodName="ContactRemoveClick" />
-                    </ia:EventTriggerBehavior>
-                  </i:Interaction.Behaviors>
-                </control:ContactListingControl>
-              </ScrollViewer>
+                      <ia:EventTriggerBehavior EventName="RemoveClick">
+                        <ia:CallMethodAction TargetObject="{Binding}"
+                          MethodName="ContactRemoveClick" />
+                      </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                  </control:ContactListingControl>
+                </ScrollViewer>
+              </u:LoadingContainer>
             </StackPanel>
           </Border>
 
           <!-- Details -->
-          <StackPanel Grid.Column="2">
-            <control:ContactDetailViewControl
-              ItemSource="{Binding ContactSelected}"
-              IsVisible="{Binding IsContactSelected, FallbackValue=False}">
-              <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="EditClick">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="ContactEditClick" />
-                </ia:EventTriggerBehavior>
+          <u:LoadingContainer Grid.Column="2"
+            IsLoading="{Binding ApplyFiltersCommand.IsRunning}"
+            HorizontalAlignment="Stretch" LoadingMessage="loading..."
+            VerticalContentAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch">
+            <StackPanel>
+              <control:ContactDetailViewControl
+                ItemSource="{Binding ContactSelected}"
+                IsVisible="{Binding IsContactSelected, FallbackValue=False}">
+                <i:Interaction.Behaviors>
+                  <ia:EventTriggerBehavior EventName="EditClick">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="ContactEditClick" />
+                  </ia:EventTriggerBehavior>
 
-                <ia:EventTriggerBehavior EventName="StarClick">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="ContactStarClick" />
-                </ia:EventTriggerBehavior>
+                  <ia:EventTriggerBehavior EventName="StarClick">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="ContactStarClick" />
+                  </ia:EventTriggerBehavior>
 
-                <ia:EventTriggerBehavior EventName="RemoveClick">
-                  <ia:CallMethodAction TargetObject="{Binding}"
-                    MethodName="ContactRemoveClick" />
-                </ia:EventTriggerBehavior>
-              </i:Interaction.Behaviors>
-            </control:ContactDetailViewControl>
-            <v:NoContactView IsVisible="{Binding !IsContactSelected}" />
-          </StackPanel>
+                  <ia:EventTriggerBehavior EventName="RemoveClick">
+                    <ia:CallMethodAction TargetObject="{Binding}"
+                      MethodName="ContactRemoveClick" />
+                  </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+              </control:ContactDetailViewControl>
+              <v:NoContactView IsVisible="{Binding !IsContactSelected}" />
+            </StackPanel>
+          </u:LoadingContainer>
         </Grid>
       </Border>
     </Grid>

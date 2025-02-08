@@ -91,7 +91,6 @@ public partial class ContactDetailViewControl : ContentControl {
   /// </summary>
   [RelayCommand]
   private void EditButton(Contact selected) {
-    ItemSource = selected;
     RaiseEvent(new RoutedEventArgs(EditClickEvent));
   }
 
@@ -100,7 +99,6 @@ public partial class ContactDetailViewControl : ContentControl {
   /// </summary>
   [RelayCommand]
   private void StarButton(Contact selected) {
-    ItemSource = selected;
     RaiseEvent(new RoutedEventArgs(StarClickEvent));
   }
 
