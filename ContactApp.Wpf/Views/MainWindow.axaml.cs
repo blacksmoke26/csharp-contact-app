@@ -26,4 +26,13 @@ public partial class MainWindow : UrsaWindow {
       elm.Height = e.ClientSize.Height - 259; // - Search input control height
     }
   }
+
+  /// <summary>
+  /// Auto focus search query textbox on loaded
+  /// </summary>
+  /// <param name="sender">The sender object</param>
+  /// <param name="e">Event arguments</param>
+  private void SearchTextBox_OnLoaded(object? sender, RoutedEventArgs e) {
+    (sender as TextBox)?.Focus();
+  }
 }
