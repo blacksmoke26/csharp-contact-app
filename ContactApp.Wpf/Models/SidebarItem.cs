@@ -9,7 +9,29 @@ public enum SidebarItemType {
 }
 
 public partial class SidebarItem : ObservableObject {
+  /// <summary>
+  /// Sidebar item id for all category
+  /// </summary>
+  public const string ItemIdAll = "_all";
+
+  /// <summary>
+  /// Sidebar item id for frequent category
+  /// </summary>
+  public const string ItemIdFrequent = "_frequent";
+
+  /// <summary>
+  /// Sidebar item id for starred category
+  /// </summary>
+  public const string ItemIdStarred = "_starred";
+
+  /// <summary>
+  /// Unique ID
+  /// </summary>
   public string? Id { get; set; }
+  
+  /// <summary>
+  /// Item Type
+  /// </summary>
   public SidebarItemType ItemType { get; set; } = SidebarItemType.Item;
 
   /// <summary>
@@ -46,28 +68,39 @@ public partial class SidebarItem : ObservableObject {
   }
 
   /// <summary>
+  /// Check that the given sidebar item id is predefined or not
+  /// </summary>
+  /// <param name="id">The item id</param>
+  /// <returns>Returns true if matched, false otherwise</returns>
+  public static bool IsPredefinedId(string id) {
+    return id is ItemIdAll or ItemIdStarred or ItemIdFrequent;
+  }
+
+  /// <summary>
   /// Return the predefined sidebar-item 
   /// </summary>
   /// <returns>The Sidebar-item list</returns>
   public static Task<List<SidebarItem>> FetchPredefinedAsync() {
+    var iconColor = SolidColorBrush.Parse("#B5B5B5");
+
     return Task.FromResult<List<SidebarItem>>([
       new() {
-        Id = "all",
+        Id = ItemIdAll,
         Label = "All",
         IconText = "\ue214",
-        IconColor = SolidColorBrush.Parse("#5e5f60"),
+        IconColor = iconColor,
       },
       new() {
-        Id = "frequent",
+        Id = ItemIdFrequent,
         Label = "Frequent",
         IconText = "\ue398",
-        IconColor = SolidColorBrush.Parse("#5e5f60"),
+        IconColor = iconColor,
       },
       new() {
-        Id = "starred",
+        Id = ItemIdStarred,
         Label = "Starred",
         IconText = "\ue46a",
-        IconColor = SolidColorBrush.Parse("#5e5f60"),
+        IconColor = iconColor,
       },
       new() {
         Label = "-",
