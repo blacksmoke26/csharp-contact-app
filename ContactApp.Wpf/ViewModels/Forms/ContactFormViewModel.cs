@@ -58,6 +58,7 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
   /// </summary>
   /// <param name="contact">The contact object</param>
   public void PopulateFrom(Contact contact) {
+    Id = contact.Id;
     FirstName = contact.FirstName;
     LastName = contact.LastName;
     Company = contact.Company;
@@ -65,7 +66,7 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
     Email = contact.Email;
     Address = contact.Address;
     Notes = contact.Notes;
-    Department = Departments.FirstOrDefault(x => x.Id == contact.Department.Id);
+    Department = Departments.FirstOrDefault(x => x.Id.Equals(contact.Department.Id));
   }
 
   /// <summary>
@@ -95,9 +96,7 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
   }
 
   /// <inheritdoc/>
-  public bool IsFormSubmitted() {
-    return _isFormSubmitted;
-  }
+  public bool IsFormSubmitted() => _isFormSubmitted;
 
   /// <inheritdoc/>
   [RelayCommand]
