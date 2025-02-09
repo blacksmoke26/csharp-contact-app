@@ -16,12 +16,17 @@
   ExtendClientAreaChromeHints="NoChrome" CanResize="True"
   ExtendClientAreaTitleBarHeightHint="-1"
   ExtendClientAreaToDecorationsHint="True" SystemDecorations="None"
-  TitleBarContent="" Icon="/Assets/avalonia-logo.ico" BorderThickness="1"
+  TitleBarContent="" Icon="/Assets/app-icon.ico" BorderThickness="1"
   BorderBrush="#101010" IsManagedResizerVisible="True"
   TitleBarMargin="15 5 15 0">
 
   <u:UrsaWindow.LeftContent>
-    <TextBlock Text="Contacts Manager" Padding="0 7 0 0" />
+    <TextBlock Padding="0 7 0 0">
+      Contacts Manager: <TextBlock Text="by" Classes="Quaternary"/> 
+      <HyperlinkButton
+        ToolTip.Tip="Visit my github profile"
+        NavigateUri="https://github.com/blacksmoke26">Junaid Atari</HyperlinkButton>
+    </TextBlock>
   </u:UrsaWindow.LeftContent>
 
   <Design.DataContext>
@@ -98,8 +103,7 @@
               <u:LoadingContainer
                 IsLoading="{Binding ApplyFiltersCommand.IsRunning}"
                 HorizontalAlignment="Stretch" LoadingMessage="loading..."
-                VerticalContentAlignment="Stretch"
-                VerticalAlignment="Stretch"
+                VerticalContentAlignment="Stretch" VerticalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch">
                 <ScrollViewer x:Name="ListingScrollViewer"
                   VerticalScrollBarVisibility="Auto"
@@ -134,8 +138,7 @@
           <u:LoadingContainer Grid.Column="2"
             IsLoading="{Binding ApplyFiltersCommand.IsRunning}"
             HorizontalAlignment="Stretch" LoadingMessage="loading..."
-            VerticalContentAlignment="Stretch"
-            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Stretch" VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch">
             <StackPanel>
               <control:ContactDetailViewControl
