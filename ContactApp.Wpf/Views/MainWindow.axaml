@@ -16,7 +16,7 @@
   ExtendClientAreaChromeHints="NoChrome" CanResize="True"
   ExtendClientAreaTitleBarHeightHint="-1"
   ExtendClientAreaToDecorationsHint="True" SystemDecorations="None"
-  TitleBarContent="" Icon="/Assets/avalonia-logo.ico" BorderThickness="1"
+  TitleBarContent="" Icon="/Assets/app-icon.ico" BorderThickness="1"
   BorderBrush="#101010" IsManagedResizerVisible="True"
   TitleBarMargin="15 5 15 0">
 
