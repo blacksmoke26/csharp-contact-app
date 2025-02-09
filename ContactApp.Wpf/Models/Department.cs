@@ -15,16 +15,19 @@ public class Department {
   public static Task<List<Department>> FetchPredefinedAsync() {
     return Task.FromResult<List<Department>>([
       new() {
+        Id = 1,
         Name = "Engineering",
         Slug = "engineering",
         Color = "#5d87ff",
       },
       new() {
+        Id = 2,
         Name = "Support",
         Slug = "support",
         Color = "#fa896b",
       },
       new() {
+        Id = 3,
         Name = "Sales",
         Slug = "sales",
         Color = "#13deb9",

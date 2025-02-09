@@ -16,16 +16,15 @@ public class PhoneNumberConvertor : IValueConverter {
   public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
     var placeholder = parameter ?? "-";
 
-    if (value == null) return placeholder;
-
-    var phone = (string)value;
-    return string.Concat(phone[..3], "-", phone[3..6], "-", phone[6..]);
+    return value == null
+      ? placeholder
+      : Contact.FormatPhoneNumber((string)value, PhoneNumberFormat.International);
   }
 
   /// <inheritdoc/>
   public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
     return value == null
       ? null
-      : Regex.Replace((string)value, @"/[^\+\d]+/", String.Empty);
+      : Contact.FormatPhoneNumber((string)value, PhoneNumberFormat.E123);
   }
 }

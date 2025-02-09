@@ -4,8 +4,9 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:u="https://irihi.tech/ursa"
   xmlns:vm="clr-namespace:ContactApp.Wpf.ViewModels.Forms"
+  xmlns:conv="clr-namespace:ContactApp.Wpf.Convertors"
   xmlns:mod="clr-namespace:ContactApp.Wpf.Models" mc:Ignorable="d"
-  d:DesignWidth="600" d:DesignHeight="800"
+  d:DesignWidth="600" d:DesignHeight="610"
   d:DataContext="vm:ContactFormViewModel"
   x:Class="ContactApp.Wpf.Views.Forms.ContactFormView" Width="600"
   x:DataType="vm:ContactFormViewModel">
@@ -17,7 +18,19 @@
   <u:DisableContainer IsEnabled="{Binding !FormSubmitCommand.IsRunning}">
     <StackPanel Spacing="20" Margin="0 5">
       <TextBlock MaxLines="2" TextWrapping="NoWrap" Classes="Tertiary">
-        Lets add new contact for your application. Fill all the fields
+        <TextBlock
+          Margin="0 0 -5 0"
+          IsVisible="{Binding Id,
+          Converter={x:Static conv:IntegerConverters.IsNotInt}}">
+          Lets add new contact for your application.
+        </TextBlock>
+        <TextBlock
+          Margin="-5 0 0 0"
+          IsVisible="{Binding Id,
+          Converter={x:Static conv:IntegerConverters.IsInt}}">
+          Lets update the existing contact.
+        </TextBlock>
+        Fill all the fields
         <LineBreak />
         and click on the Submit button.
       </TextBlock>
@@ -40,8 +53,10 @@
           <StackPanel>
             <Label Content="Department*" Margin="0 0 0 5" />
             <ComboBox PlaceholderText="Choose" Classes="Bordered"
-              ItemsSource="{Binding Departments}"
-              SelectedItem="{Binding Department}" HorizontalAlignment="Stretch">
+              Name="DepartmentComboBox"
+              ItemsSource="{Binding Departments, Mode=TwoWay}"
+              SelectedItem="{Binding Department, Mode=TwoWay}"
+              HorizontalAlignment="Stretch">
               <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type mod:Department}">
                   <TextBlock Text="{Binding Name}" />
@@ -72,15 +87,14 @@
 
         <StackPanel>
           <Label Content="Address" Margin="0 0 0 5" />
-          <TextBox AcceptsReturn="True" TextWrapping="Wrap"
-            VerticalContentAlignment="Top" Padding="10" MaxLines="2"
-            Height="60" Classes="Bordered" Watermark=""
-            Text="{Binding Address}" />
+          <TextBox TextWrapping="Wrap" VerticalContentAlignment="Top"
+            Padding="10" MaxLines="2" Height="60" Classes="Bordered"
+            Watermark="" MaxLength="100" Text="{Binding Address}" />
         </StackPanel>
 
         <StackPanel>
           <Label Content="Notes" Margin="0 0 0 5" />
-          <TextBox AcceptsReturn="True" TextWrapping="Wrap"
+          <TextBox TextWrapping="Wrap" MaxLength="350"
             VerticalContentAlignment="Top" Padding="10" Height="80"
             Classes="Bordered" Watermark="" Text="{Binding Notes}" />
         </StackPanel>

@@ -3,7 +3,6 @@
 // Website: https://github.com/blacksmoke26/
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using ContactApp.Wpf.Interfaces;
 using Irihi.Avalonia.Shared.Contracts;
 
@@ -18,6 +17,8 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
   private bool _isFormSubmitted;
 
   public ObservableCollection<Department> Departments { get; init; } = [];
+
+  [ObservableProperty] private int? _id;
 
   [ObservableProperty] [Required] [StringLength(35, MinimumLength = 3)] [NotifyDataErrorInfo]
   private string? _firstName;
@@ -34,14 +35,12 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
   [ObservableProperty] [DataType(DataType.Text)] [NotifyDataErrorInfo]
   private string? _phone;
 
-  [EmailAddress] [ObservableProperty] [NotifyDataErrorInfo]
+  [ObservableProperty] [EmailAddress] [NotifyDataErrorInfo]
   private string? _email;
 
-  [ObservableProperty] [StringLength(100)] [NotifyDataErrorInfo]
-  private string? _address;
+  [ObservableProperty] private string? _address;
 
-  [ObservableProperty] [StringLength(150)] [NotifyDataErrorInfo]
-  private string? _notes;
+  [ObservableProperty] private string? _notes;
 
   public ContactFormViewModel() {
     _ = FetchDepartments();
@@ -52,6 +51,22 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
   /// </summary>
   public void Close() {
     RequestClose?.Invoke(this, null);
+  }
+
+  /// <summary>
+  /// Populate current fields by using the contact object
+  /// </summary>
+  /// <param name="contact">The contact object</param>
+  public void PopulateFrom(Contact contact) {
+    Id = contact.Id;
+    FirstName = contact.FirstName;
+    LastName = contact.LastName;
+    Company = contact.Company;
+    Phone = contact.GetFormattedPhoneNumber(PhoneNumberFormat.International);
+    Email = contact.Email;
+    Address = contact.Address;
+    Notes = contact.Notes;
+    Department = Departments.FirstOrDefault(x => x.Id.Equals(contact.Department.Id));
   }
 
   /// <summary>
@@ -71,8 +86,9 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
       LastName!,
       Department!
     ) {
+      Id = Id,
       Company = Company,
-      Phone = string.IsNullOrWhiteSpace(Phone) ? null : Regex.Replace(Phone, @"/[^\+\d]+/", string.Empty),
+      Phone = Contact.FormatPhoneNumber(Phone, PhoneNumberFormat.E123),
       Email = Email,
       Notes = Notes,
       Address = Address,
@@ -80,9 +96,7 @@ public partial class ContactFormViewModel : ObservableValidator, IDialogContext,
   }
 
   /// <inheritdoc/>
-  public bool IsFormSubmitted() {
-    return _isFormSubmitted;
-  }
+  public bool IsFormSubmitted() => _isFormSubmitted;
 
   /// <inheritdoc/>
   [RelayCommand]
