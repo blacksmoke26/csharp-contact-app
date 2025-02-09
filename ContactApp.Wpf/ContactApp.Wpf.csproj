@@ -7,6 +7,14 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
+    <Title>Contacts Manager</Title>
+    <Authors>Junaid Atari</Authors>
+    <Copyright>(c) 2025 Junaid Atari</Copyright>
+    <PackageIcon>Assets\app-icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/blacksmoke26/csharp-contact-app</RepositoryUrl>
+    <Company>Atari Labs</Company>
+    <Product>Contacts Manager</Product>
   </PropertyGroup>
 
   <ItemGroup>
