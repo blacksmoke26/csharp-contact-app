@@ -1,6 +1,19 @@
+using System.Text.RegularExpressions;
 using Bogus;
 
 namespace ContactApp.Wpf.Models;
+
+public enum PhoneNumberFormat {
+  /// <summary>
+  /// Output as "+034042239532'
+  /// </summary>
+  E123 = 0,
+  
+  /// <summary>
+  /// Output as "(+03) 404 2239532'
+  /// </summary>
+  International = 1,
+}
 
 public partial class Contact(string firstName, string lastName, Department department) : ObservableObject {
   [ObservableProperty] private int? _id;
@@ -17,9 +30,54 @@ public partial class Contact(string firstName, string lastName, Department depar
   [ObservableProperty] private string? _profileImage;
 
   [ObservableProperty] private bool _isStarred;
-  
+
   [ObservableProperty] private DateTime _createdAt = DateTime.Now;
   [ObservableProperty] private DateTime _updatedAt = DateTime.Now;
+
+  /// <summary>
+  /// Formats a given phone number<br/>
+  /// Reference: <see href="https://en.wikipedia.org/wiki/National_conventions_for_writing_telephone_numbers"/>
+  /// </summary>
+  /// <param name="phone">The phone number</param>
+  /// <param name="format">The format</param>
+  /// <returns>Returns the formatted phone number</returns>
+  public static string? FormatPhoneNumber(string? phone, PhoneNumberFormat format) {
+    if ( phone == null) return null;
+    
+    return format switch {
+      PhoneNumberFormat.International => string.Concat("(", phone[..3], ") ", phone[3..6], " ", phone[6..]),
+      _ => Regex.Replace(phone, @"[^\+\d]+", String.Empty),
+    };
+  }
+
+  /// <summary>
+  /// Formats a phone number<br/>
+  /// Reference: <see href="https://en.wikipedia.org/wiki/National_conventions_for_writing_telephone_numbers"/>
+  /// </summary>
+  /// <param name="format">The format</param>
+  /// <returns>Returns the formatted phone number</returns>
+  public string? GetFormattedPhoneNumber(PhoneNumberFormat format) {
+    return FormatPhoneNumber(Phone, format);
+  }
+
+  /// <summary>
+  /// Copy the given object data into the current one
+  /// </summary>
+  /// <param name="contact">The contact object</param>
+  public void CopyFrom(Contact contact) {
+    FirstName = contact.FirstName;
+    LastName = contact.LastName;
+    Company = contact.Company;
+    Phone = contact.GetFormattedPhoneNumber(PhoneNumberFormat.E123);
+    Email = contact.Email;
+    Address = contact.Address;
+    Notes = contact.Notes;
+    ProfileImage = contact.ProfileImage;
+    UpdatedAt = DateTime.Now;
+    IsStarred = contact.IsStarred;
+    Id = contact.Id;
+    Department = contact.Department;
+  }
 
   /// <summary>
   /// Return the predefined departments 
