@@ -112,9 +112,22 @@ public partial class MainWindowViewModel : ViewModelBase {
   /// <summary>
   /// Event: Triggered when contact edit button is clicked
   /// </summary>
-  public void ContactEditClick(object? _, RoutedEventArgs e) {
-    ContactSelected = GetContactFromEventArgs(e);
-    Console.WriteLine("Contact edit button clicked");
+  public async Task ContactEditClick(object? _, RoutedEventArgs e) {
+    ContactSelected = GetContactFromEventArgs(e)!;
+
+    var instance = Ioc.Default.GetRequiredService<ContactFormViewModel>();
+    instance.PopulateFrom(ContactSelected);
+
+    await OverlayDialog.ShowModal<ContactFormView, ContactFormViewModel>(instance,
+      options: new OverlayDialogOptions {
+        Title = "Edit Contact",
+        Buttons = DialogButton.None,
+        HorizontalAnchor = HorizontalPosition.Center,
+      }
+    );
+
+    if (instance.IsFormSubmitted())
+      ContactSelected.CopyFrom(instance.GetFormData()!);
   }
 
   /// <summary>
