@@ -14,6 +14,7 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 
 $dotNetVersion = "net9.0";
 $assemblyName = "ContactApp.Wpf";
+$originalExeName = "ContactsManager";
 $execName = "contactapp";
 $appVersion = "0.0.1";
 
@@ -59,10 +60,10 @@ function Resolve-Dist-Dir()
 if ($deployment.Portable -eq $true)
 {
 	$distribution.Portable = [Hashtable][ordered]@{
-		ExecutableName = "${assemblyName}.exe"
+		ExecutableName = "${originalExeName}.exe"
 		TargetExecutableName = "${execName}.exe"
 		TargetDirectory = Resolve-Dist-Dir -Path $publishPath -Platform $bins.Portable
-		CleanFiles = @("${assemblyName}.pdb")
+		CleanFiles = @("${originalExeName}.pdb")
 		ZipFile = "${execName}-portable-v${appVersion}.zip"
 	}
 }
@@ -70,10 +71,10 @@ if ($deployment.Portable -eq $true)
 if ($deployment.WinX64 -eq $true)
 {
 	$distribution.WinX64 = [ordered]@{
-		ExecutableName = "${assemblyName}.exe"
+		ExecutableName = "${originalExeName}.exe"
 		TargetExecutableName = "${execName}.exe"
 		TargetDirectory = Resolve-Dist-Dir -Path $publishPath -Platform $bins.WinX64
-		CleanFiles = @("${assemblyName}.pdb")
+		CleanFiles = @("${originalExeName}.pdb")
 		ZipFile = "${execName}-win_x64-v${appVersion}.zip"
 	}
 }
@@ -81,10 +82,10 @@ if ($deployment.WinX64 -eq $true)
 if ($deployment.WinX86 -eq $true)
 {
 	$distribution.WinX86 = [ordered]@{
-		ExecutableName = "${assemblyName}.exe"
+		ExecutableName = "${originalExeName}.exe"
 		TargetExecutableName = "${execName}.exe"
 		TargetDirectory = Resolve-Dist-Dir -Path $publishPath -Platform $bins.WinX86
-		CleanFiles = @("${assemblyName}.pdb")
+		CleanFiles = @("${originalExeName}.pdb")
 		ZipFile = "${execName}-win_x86-v${appVersion}.zip"
 	}
 }
@@ -92,10 +93,10 @@ if ($deployment.WinX86 -eq $true)
 if ($deployment.LinuxArm64 -eq $true)
 {
 	$distribution.LinuxArm64 = [ordered]@{
-		ExecutableName = "${assemblyName}"
+		ExecutableName = "${originalExeName}"
 		TargetExecutableName = "${execName}"
 		TargetDirectory = Resolve-Dist-Dir -Path $publishPath -Platform $bins.LinuxArm64
-		CleanFiles = @("${assemblyName}.pdb")
+		CleanFiles = @("${originalExeName}.pdb")
 		ZipFile = "${execName}-linux_arm64-v${appVersion}.zip"
 	}
 }
@@ -103,10 +104,10 @@ if ($deployment.LinuxArm64 -eq $true)
 if ($deployment.LinuxX64 -eq $true)
 {
 	$distribution.LinuxX64 = [ordered]@{
-		ExecutableName = "${assemblyName}"
+		ExecutableName = "${originalExeName}"
 		TargetExecutableName = "${execName}"
 		TargetDirectory = Resolve-Dist-Dir -Path $publishPath -Platform $bins.LinuxX64
-		CleanFiles = @("${assemblyName}.pdb")
+		CleanFiles = @("${originalExeName}.pdb")
 		ZipFile = "${execName}-linux_x64-v${appVersion}.zip"
 	}
 }
@@ -114,10 +115,10 @@ if ($deployment.LinuxX64 -eq $true)
 if ($deployment.OsxX64 -eq $true)
 {
 	$distribution.OsxX64 = [ordered]@{
-		ExecutableName = "${assemblyName}"
+		ExecutableName = "${originalExeName}"
 		TargetExecutableName = "${execName}"
 		TargetDirectory = Resolve-Dist-Dir -Path $publishPath -Platform $bins.OsxX64
-		CleanFiles = @("${assemblyName}.pdb")
+		CleanFiles = @("${originalExeName}.pdb")
 		ZipFile = "${execName}-osx_x64-v${appVersion}.zip"
 	}
 }
@@ -148,7 +149,7 @@ function Create-Release-Archice()
 	}
 
 	$executableName = Join-Path $pubPath $Config.ExecutableName -ErrorAction Ignore;
-	$targetExecutableName = Join-Path $pubPath $Config.ExecutableName -ErrorAction Ignore;
+	$targetExecutableName = Join-Path $pubPath $Config.TargetExecutableName -ErrorAction Ignore;
 
 	if (Test-Path ($executableName))
 	{
