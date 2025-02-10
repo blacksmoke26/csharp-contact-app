@@ -49,9 +49,9 @@
           VerticalAlignment="Top">
           <StackPanel Spacing="3" Margin="25 25 0 0">
             <Label Theme="{DynamicResource TitleLabel}" Classes="H3"
-              Content="Contact app" />
+              Content="Contacts Manager" />
             <Label FontSize="16" FontWeight="Light"
-              Content="List Your Contacts" />
+              Content="Manage your contacts like a pro!" />
           </StackPanel>
           <Border Grid.Column="1" ClipToBounds="True" Height="109"
             HorizontalAlignment="Right" Margin="0 0 25 0">
