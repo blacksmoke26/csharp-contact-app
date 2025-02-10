@@ -15,6 +15,10 @@
     <RepositoryUrl>https://github.com/blacksmoke26/csharp-contact-app</RepositoryUrl>
     <Company>Atari Labs</Company>
     <Product>Contacts Manager</Product>
+    <AssemblyName>ContactsManager</AssemblyName>
+    <AssemblyVersion>0.0.1</AssemblyVersion>
+    <Description>Contacts Manager</Description>
+    <FileVersion>0.0.1.50</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
